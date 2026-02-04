@@ -67,7 +67,6 @@ local keycodeMap = {
 ["f12"] = 0x7B,
 }
 
-local UserInputService = game:GetService("UserInputService")
 local LocalPlayer = game.Players.LocalPlayer
 local Run = game:GetService('RunService')
 
@@ -108,31 +107,25 @@ end
 
 local Macros = {}
 
-Macros.Z = function()
-simulatekeydown("3")
-simulatekeyup("3")
+Macros[getgenv().Keys[1]] = function() -- C: red downslam extend
+simulatekeydown("1")
+simulatekeyup("1")
 
-delay(150)
-simulatekeydown("3")
-simulatekeyup("3")
+delay(430)
+simulatekeydown("SPACE")
+simulatekeyup("SPACE")
 
-simulatekeydown("3")
+simulatekeydown("w")
 simulatekeydown("q")
 simulatekeyup("q")
-simulatekeyup("3")
 
-delay(10)
-simulatekeydown("3")
 delay(40)
-simulatekeyup("3")
+simulatekeyup("w")
 
-delay(60)
-simulatekeydown("3")
-delay(30)
-simulatekeyup("3")
+delay(250)
 end
 
-Macros.X = function()
+Macros[getgenv().Keys[2]] = function() -- X: beatdown red stack
 simulatekeydown("2")
 delay(110)
 
@@ -206,25 +199,55 @@ simulatekeyup("f")
 simulatekeyup("1")
 end
 
-Macros.C = function()
-simulatekeydown("1")
-simulatekeyup("1")
+Macros[getgenv().Keys[3]] = function() -- Z: tp to player then blue
+local sel = FindNearestLive()
+if not sel then return end
+local Root = LocalPlayer.Character.HumanoidRootPart
+local mCD = Run.RenderStepped:Connect(function()
+Root.CFrame = Root.CFrame:lerp(sel.CFrame + Vector3.new(0,0,-3), 0.15)
+end)
+delay(500)
+mCD:Disconnect()
 
-delay(430)
-simulatekeydown("SPACE")
-simulatekeyup("SPACE")
+simulatekeydown("3")
+simulatekeyup("3")
 
-simulatekeydown("w")
+delay(150)
+simulatekeydown("3")
+simulatekeyup("3")
+
+simulatekeydown("3")
 simulatekeydown("q")
 simulatekeyup("q")
+simulatekeyup("3")
 
+delay(10)
+simulatekeydown("3")
 delay(40)
-simulatekeyup("w")
+simulatekeyup("3")
 
-delay(250)
+delay(60)
+simulatekeydown("3")
+delay(30)
+simulatekeyup("3")
 end
 
-Macros.Y = function()
+Macros[getgenv().Keys[4]] = function() -- T: beatdown extend
+simulatekeydown("2")
+simulatekeyup("2")
+local sel = FindNearestLive()
+local cs = LocalPlayer.Character:WaitForChild('CHARGINGSMASH',6)
+if not cs or not sel then return end
+cs.Destroying:Wait()
+local Root = LocalPlayer.Character.HumanoidRootPart
+local mCD = Run.RenderStepped:Connect(function()
+Root.CFrame = Root.CFrame:lerp(sel.CFrame+Vector3.new(0,6,0),0.15);
+end)
+wait(1.5)
+mCD:Disconnect()
+end
+
+Macros[getgenv().Keys[5]] = function() -- Y: dashstack blue
 simulatekeydown("3")
 simulatekeyup("3")
 
@@ -247,7 +270,7 @@ delay(30)
 simulatekeyup("3")
 end
 
-Macros.J = function()
+Macros[getgenv().Keys[6]] = function() -- J: auto jogo beatdown counter
 simulatekeydown("4")
 simulatekeyup("4")
 
@@ -294,22 +317,7 @@ end
 delay(380)
 end
 
-Macros.T = function()
-simulatekeydown("2")
-simulatekeyup("2")
-local sel = FindNearestLive()
-local cs = LocalPlayer.Character:WaitForChild('CHARGINGSMASH',6)
-if not cs or not sel then return end
-cs.Destroying:Wait()
-Root = LocalPlayer.Character.HumanoidRootPart
-mCD = Run.RenderStepped:Connect(function()
-Root.CFrame = Root.CFrame:lerp(sel.CFrame+Vector3.new(0,6,0),0.15);
-end)
-wait(1.5)
-mCD:Disconnect()
-end
-
-Macros.Five = function()
+Macros[getgenv().Keys[7]] = function() -- Five: infinity anim cancel
 simulatekeydown("4")
 simulatekeyup("4")
 delay(30)
