@@ -165,7 +165,7 @@ pcall(function()
     workspace.Terrain.WaterTransparency = 1
 end)
 
-if setfpscap then setfpscap(10) end
+if setfpscap then setfpscap(60) end
 
 task.spawn(function()
     while true do
