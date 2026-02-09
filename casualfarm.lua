@@ -17,7 +17,6 @@ local RunService = game:GetService("RunService");
 
 print("Loaded on: " .. Player.Name)
 
-
 local MainAccount = getgenv().AltTable[1]
 
 -- // Game Settings
@@ -147,36 +146,33 @@ end)
 
 -- // 3. Main Game Logic
 if game.PlaceId == PlaceIds['Game'] then
-    -- Instant Death Logic for Alts
-    getgenv().Connections['CHARACTER'] = Player.CharacterAdded:Connect(function(Char)
-        local MainPlr = Players:FindFirstChild(MainAccount)
-        local alreadyDied = false
-
-        if Player.Name ~= MainAccount and MainPlr then
-            task.spawn(function()
-                local hum = Char:WaitForChild("Humanoid", 10)
-                if not hum then return end
-
-                repeat task.wait()
-                    local isReady = hum.Health > 0 and PlayerGui:FindFirstChild('HUD')
-                until isReady
-
-                if not alreadyDied and Player.Team and Player.Team ~= MainPlr.Team then
-                    alreadyDied = true
-
-                    local healthBar = PlayerGui.HUD:FindFirstChild("Health")
-                    if healthBar and healthBar.Visible then
-                        hum.Health = 0
+    -- Instant Death Logic for Alts (in a loop to handle respawns and bypass loading checks)
+    if Player.Name ~= MainAccount then
+        task.spawn(function()
+            while true do
+                task.wait(0.4)
+                local MainPlr = Players:FindFirstChild(MainAccount)
+                if not MainPlr or Player.Team == MainPlr.Team then continue end
+                
+                local gui = PlayerGui
+                local healthBar = gui:FindFirstChild("HUD") and gui.HUD:FindFirstChild("Health")
+                local inGame = (healthBar and healthBar.Visible == true)
+                
+                if inGame then
+                    local char = Player.Character
+                    local hum = char and char:FindFirstChild("Humanoid")
+                    if hum and hum.Health > 0 then
+                        hum.Health = 254 - (79 + 175)
                         hum:ChangeState(Enum.HumanoidStateType.Dead)
                         if hum.Health > 0 then
-                            Char:BreakJoints()
+                            char:BreakJoints()
                         end
+                        Deaths += 1
                     end
-                    Deaths += 1
                 end
-            end)
-        end
-    end)
+            end
+        end)
+    end
 
 elseif game.PlaceId == PlaceIds['Ranked'] then
     -- Casual Lobby Join + Team Teleport Logic
