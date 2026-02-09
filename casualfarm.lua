@@ -1,4 +1,11 @@
 
+-- // ==================== CONFIG ====================
+getgenv().Webhook = "https://discord.com/api/webhooks/1468613659814265014/lBATcwN7r_quCi6lUfaIqLBl4IqO9Wi3annCY7sOZT_EG_5lEanUYpExTKk6N3N9e9QJ" -- PUT WEEBHOOK INSIDE ""
+getgenv().AltTable = {"maw317", "sccoutshield"}; -- change "main" with your main account (USERNAME NOT DISPLAYNAME) and "alt" with ur alt's user
+getgenv().TrackAltStats = false -- set it to true if u wanna track alt stats 
+
+
+
 -- // Configuration & Initialization
 if (getgenv().Connections) then
     for _, Connection in getgenv().Connections do
@@ -215,6 +222,4 @@ elseif game.PlaceId == PlaceIds['Ranked'] then
     if team and team:IsA("Model") then
         team:PivotTo(hrp.CFrame * CFrame.new(0, 13, -8))
     end
-end
-
-print("ABA Script Loaded Successfully!")
+end⁩⁩⁩⁩⁩
