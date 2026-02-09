@@ -214,4 +214,4 @@ elseif game.PlaceId == PlaceIds['Ranked'] then
     if team and team:IsA("Model") then
         team:PivotTo(hrp.CFrame * CFrame.new(0, 13, -8))
     end
-end⁩⁩⁩⁩⁩
+end
