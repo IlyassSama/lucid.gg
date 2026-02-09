@@ -82,7 +82,7 @@ function SendStatsWebhook()
     local money = checkMoney() or "Loading..."
     local level = checkLevel()
     local prestige = checkPrestige()
-    local thumbnailUrl = "https://api.newstargeted.com/roblox/users/v1/avatar-headshot?userid=" .. Player.UserId .. "&size=150x150"
+    local thumbnailUrl = "https://imgur.com/nyhntf5"
 
     local didPrestige = (LastLevel and LastLevel >= 99 and level <= 1)
     LastLevel = level
