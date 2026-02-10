@@ -24,6 +24,8 @@ Macros[getgenv().Keys[1]] = function()
     local camdir = camera.CFrame.LookVector
     local campos = camera.CFrame.Position
     local sel = FindNearestLive()
+    local targ = sel.Parent
+    local teamtarg = targ
     local mousehit = sel.CFrame
     Event:FireServer("fire", {
         air = false,
@@ -32,35 +34,37 @@ Macros[getgenv().Keys[1]] = function()
         range = "1",
         ToolName = "Linear Strike",
         camdir = camdir,
-        targ = sel.Parent,
-        teamtarg = sel.Parent,
+        targ = targ,
+        teamtarg = teamtarg,
         mousehit = mousehit
     })
-    wait(1.1)
-    local Root = LocalPlayer.Character.HumanoidRootPart
-    Root.CFrame = Root.CFrame * CFrame.Angles(0, math.pi, 0)
-    local hrp = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-    if hrp then
-        for _, child in ipairs(hrp:GetChildren()) do
+    task.spawn(function()
+        local char = LocalPlayer.Character
+        char:WaitForChild("BarrageOnly", 5)
+        if not char:FindFirstChild("BarrageOnly") then return end
+        wait(1.1)
+        local hrp = char.HumanoidRootPart
+        for _, child in hrp:GetChildren() do
             if child:IsA("BodyVelocity") then
                 child:Destroy()
             end
         end
-    end
-    Event:FireServer("space")
-    wait(0.025)
-    Event:FireServer(
-        "truem1",
-        {
-            md = Vector3.new(0, 0, 0),
-            skeyreal = false,
-            skeydown = true,
-            dodgevelo = Vector3.new(0, 0, 0),
-            air = false
-        }
-    )
-    wait(0.025)
-    Event:FireServer("spaceoff")
+        hrp.CFrame = hrp.CFrame * CFrame.Angles(0, math.pi, 0)
+        Event:FireServer("space")
+        wait(0.1)
+        Event:FireServer(
+            "truem1",
+            {
+                md = Vector3.new(0, 0, 0),
+                skeyreal = false,
+                skeydown = true,
+                dodgevelo = Vector3.new(0, 0, 0),
+                air = false
+            }
+        )
+        wait(0.025)
+        Event:FireServer("spaceoff")
+    end)
 end
 
 return Macros
