@@ -36,7 +36,7 @@ Macros[getgenv().Keys[1]] = function()
         teamtarg = sel.Parent,
         mousehit = mousehit
     })
-    wait(0.85)
+    wait(1.1)
     local Root = LocalPlayer.Character.HumanoidRootPart
     Root.CFrame = Root.CFrame * CFrame.Angles(0, math.pi, 0)
     local hrp = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
