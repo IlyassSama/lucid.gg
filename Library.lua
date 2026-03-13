@@ -247,7 +247,7 @@ local Library = {
 
 
     Black = Color3.new(0, 0, 0);
-    Font = Enum.Font.SourceSansBold,
+    Font = Enum.Font.Code,
 
     -- frames --
     OpenedFrames = {};
