@@ -247,7 +247,7 @@ local Library = {
 
 
     Black = Color3.new(0, 0, 0);
-    Font = Enum.Font.Highway,
+    Font = Enum.Font.RobotoMono,
 
     -- frames --
     OpenedFrames = {};
