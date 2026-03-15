@@ -7682,7 +7682,7 @@ end
                 LockImage.AnchorPoint = Vector2.new(0.5, 0.5)
                 LockImage.Size = UDim2.new(1, 0, 1, 0)
                 LockImage.Position = UDim2.new(0.5, 0, 0.5, 0)
-                LockImage.Image = "rbxassetid://139246255097727"
+                LockImage.Image = "rbxassetid://106718203828255"
                 LockImage.ScaleType = Enum.ScaleType.Fit
                 LockImage.ZIndex = 51
                 LockImage.Parent = LockOverlay
