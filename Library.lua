@@ -7676,21 +7676,16 @@ end
                 LockCorner.CornerRadius = UDim.new(0, 2)
                 LockCorner.Parent = LockOverlay
 
-                -- "PAID only" label
-                local LockLabel = Instance.new("TextLabel")
-                LockLabel.BackgroundTransparency = 1
-                LockLabel.Size = UDim2.new(1, 0, 1, 0)
-                LockLabel.Position = UDim2.new(0, 0, 0, 0)
-                LockLabel.Font = Enum.Font.GothamBlack
-                LockLabel.TextSize = 28
-                LockLabel.Text = "PAID only"
-                LockLabel.TextColor3 = Color3.fromRGB(255, 50, 50)
-                LockLabel.TextStrokeTransparency = 0.4
-                LockLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-                LockLabel.TextXAlignment = Enum.TextXAlignment.Center
-                LockLabel.TextYAlignment = Enum.TextYAlignment.Center
-                LockLabel.ZIndex = 51
-                LockLabel.Parent = LockOverlay
+                -- PAID image
+                local LockImage = Instance.new("ImageLabel")
+                LockImage.BackgroundTransparency = 1
+                LockImage.AnchorPoint = Vector2.new(0.5, 0.5)
+                LockImage.Size = UDim2.new(0.85, 0, 0.75, 0)
+                LockImage.Position = UDim2.new(0.5, 0, 0.5, 0)
+                LockImage.Image = "rbxassetid://18276446000"
+                LockImage.ScaleType = Enum.ScaleType.Fit
+                LockImage.ZIndex = 51
+                LockImage.Parent = LockOverlay
 
                 -- Click fires a notification
                 LockOverlay.MouseButton1Click:Connect(function()
