@@ -7682,14 +7682,14 @@ end
                 LockImage.AnchorPoint = Vector2.new(0.5, 0.5)
                 LockImage.Size = UDim2.new(0.5, 0, 0.5, 0)
                 LockImage.Position = UDim2.new(0.5, 0, 0.5, 0)
-                LockImage.Image = "rbxassetid://15117261700"
+                LockImage.Image = "rbxassetid://138597355990295"
                 LockImage.ScaleType = Enum.ScaleType.Fit
                 LockImage.ZIndex = 51
                 LockImage.Parent = LockOverlay
 
                 -- Click fires a notification
                 LockOverlay.MouseButton1Click:Connect(function()
-                    Library:Notify("Purchase to Unlock Feature")
+                    Library:Notify("[⭐] Purchase to Unlock Feature")
                 end)
             end
 
