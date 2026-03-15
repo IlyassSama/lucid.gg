@@ -7689,7 +7689,7 @@ end
 
                 -- Click fires a notification
                 LockOverlay.MouseButton1Click:Connect(function()
-                    Library:Notify("[⭐] Purchase to Unlock Feature")
+                    Library:Notify("[⭐] Purchase to Unlock Feature", nil, 4590657391)
                 end)
             end
 
