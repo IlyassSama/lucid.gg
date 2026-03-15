@@ -231,7 +231,7 @@ local Library = {
     HudRegistry = {};
 
     -- colors and font --
-    FontColor = Color3.fromRGB(153, 153, 153);
+    FontColor = Color3.fromRGB(255, 255, 255);
     MainColor = Color3.fromRGB(36, 37, 37);
     BackgroundColor = Color3.fromRGB(28, 29, 29);
 
@@ -247,7 +247,7 @@ local Library = {
 
 
     Black = Color3.new(0, 0, 0);
-    Font = Enum.Font.Montserrat,
+    Font = Enum.Font.Highway,
 
     -- frames --
     OpenedFrames = {};
@@ -7656,15 +7656,57 @@ end
 
             Tab.Groupboxes[Info.Name] = Groupbox
 
+            -- Lock / PAID overlay
+            if Info.Lock == true then
+                -- Overlay frame (blocks all input underneath)
+                local LockOverlay = Instance.new("TextButton")
+                LockOverlay.Name = "LockOverlay"
+                LockOverlay.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+                LockOverlay.BackgroundTransparency = 0.35
+                LockOverlay.BorderSizePixel = 0
+                LockOverlay.Size = UDim2.new(1, 0, 1, 0)
+                LockOverlay.Position = UDim2.new(0, 0, 0, 0)
+                LockOverlay.ZIndex = 50
+                LockOverlay.AutoButtonColor = false
+                LockOverlay.Text = ""
+                LockOverlay.Parent = BoxOuter
+
+                -- UICorner to match the groupbox shape
+                local LockCorner = Instance.new("UICorner")
+                LockCorner.CornerRadius = UDim.new(0, 2)
+                LockCorner.Parent = LockOverlay
+
+                -- "PAID only" label
+                local LockLabel = Instance.new("TextLabel")
+                LockLabel.BackgroundTransparency = 1
+                LockLabel.Size = UDim2.new(1, 0, 1, 0)
+                LockLabel.Position = UDim2.new(0, 0, 0, 0)
+                LockLabel.Font = Enum.Font.GothamBlack
+                LockLabel.TextSize = 28
+                LockLabel.Text = "PAID only"
+                LockLabel.TextColor3 = Color3.fromRGB(255, 50, 50)
+                LockLabel.TextStrokeTransparency = 0.4
+                LockLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+                LockLabel.TextXAlignment = Enum.TextXAlignment.Center
+                LockLabel.TextYAlignment = Enum.TextYAlignment.Center
+                LockLabel.ZIndex = 51
+                LockLabel.Parent = LockOverlay
+
+                -- Click fires a notification
+                LockOverlay.MouseButton1Click:Connect(function()
+                    Library:Notify("Purchase to Unlock Feature")
+                end)
+            end
+
             return Groupbox
         end
 
-        function Tab:AddLeftGroupbox(Name)
-            return Tab:AddGroupbox({ Side = 1; Name = Name; })
+        function Tab:AddLeftGroupbox(Name, Lock)
+            return Tab:AddGroupbox({ Side = 1; Name = Name; Lock = Lock; })
         end
 
-        function Tab:AddRightGroupbox(Name)
-            return Tab:AddGroupbox({ Side = 2; Name = Name; })
+        function Tab:AddRightGroupbox(Name, Lock)
+            return Tab:AddGroupbox({ Side = 2; Name = Name; Lock = Lock; })
         end
 
         function Tab:AddTabbox(Info)
