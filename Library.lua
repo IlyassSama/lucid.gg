@@ -7662,7 +7662,7 @@ end
                 local LockOverlay = Instance.new("TextButton")
                 LockOverlay.Name = "LockOverlay"
                 LockOverlay.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-                LockOverlay.BackgroundTransparency = 0.7
+                LockOverlay.BackgroundTransparency = 0.87
                 LockOverlay.BorderSizePixel = 0
                 LockOverlay.Size = UDim2.new(1, 0, 1, 0)
                 LockOverlay.Position = UDim2.new(0, 0, 0, 0)
