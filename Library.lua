@@ -7680,7 +7680,7 @@ end
                 local LockImage = Instance.new("ImageLabel")
                 LockImage.BackgroundTransparency = 1
                 LockImage.AnchorPoint = Vector2.new(0.5, 0.5)
-                LockImage.Size = UDim2.new(0.85, 0, 0.75, 0)
+                LockImage.Size = UDim2.new(0.5, 0, 0.5, 0)
                 LockImage.Position = UDim2.new(0.5, 0, 0.5, 0)
                 LockImage.Image = "rbxassetid://15117261700"
                 LockImage.ScaleType = Enum.ScaleType.Fit
