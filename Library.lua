@@ -7662,7 +7662,7 @@ end
                 local LockOverlay = Instance.new("TextButton")
                 LockOverlay.Name = "LockOverlay"
                 LockOverlay.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-                LockOverlay.BackgroundTransparency = 0.5
+                LockOverlay.BackgroundTransparency = 0.7
                 LockOverlay.BorderSizePixel = 0
                 LockOverlay.Size = UDim2.new(1, 0, 1, 0)
                 LockOverlay.Position = UDim2.new(0, 0, 0, 0)
@@ -7686,23 +7686,6 @@ end
                 LockImage.ScaleType = Enum.ScaleType.Fit
                 LockImage.ZIndex = 51
                 LockImage.Parent = LockOverlay
-
-                -- "Paid Access Only" text below the image
-                local LockText = Instance.new("TextLabel")
-                LockText.BackgroundTransparency = 1
-                LockText.AnchorPoint = Vector2.new(0.5, 0)
-                LockText.Size = UDim2.new(1, -8, 0, 22)
-                LockText.Position = UDim2.new(0.5, 0, 0.875, 0) -- Right below the image (0.5 center + 0.375 half height)
-                LockText.Font = Enum.Font.Code
-                LockText.TextSize = 15
-                LockText.Text = "⭐Paid Access Only⭐"
-                LockText.TextColor3 = Color3.fromRGB(255, 255, 255)
-                LockText.TextStrokeTransparency = 0.3
-                LockText.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-                LockText.TextXAlignment = Enum.TextXAlignment.Center
-                LockText.TextYAlignment = Enum.TextYAlignment.Center
-                LockText.ZIndex = 51
-                LockText.Parent = LockOverlay
 
                 -- Click fires a notification
                 LockOverlay.MouseButton1Click:Connect(function()
