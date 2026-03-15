@@ -7690,10 +7690,10 @@ end
                 -- "Paid Access Only" text below the image
                 local LockText = Instance.new("TextLabel")
                 LockText.BackgroundTransparency = 1
-                LockText.AnchorPoint = Vector2.new(0.5, 1)
+                LockText.AnchorPoint = Vector2.new(0.5, 0)
                 LockText.Size = UDim2.new(1, -8, 0, 22)
-                LockText.Position = UDim2.new(0.5, 0, 1, -6)
-                LockText.Font = Enum.Font.GothamBold
+                LockText.Position = UDim2.new(0.5, 0, 0.875, 0) -- Right below the image (0.5 center + 0.375 half height)
+                LockText.Font = Enum.Font.Code
                 LockText.TextSize = 15
                 LockText.Text = "⭐Paid Access Only⭐"
                 LockText.TextColor3 = Color3.fromRGB(255, 255, 255)
