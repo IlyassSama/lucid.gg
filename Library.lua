@@ -7662,7 +7662,7 @@ end
                 local LockOverlay = Instance.new("TextButton")
                 LockOverlay.Name = "LockOverlay"
                 LockOverlay.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-                LockOverlay.BackgroundTransparency = 0.87
+                LockOverlay.BackgroundTransparency = 0.4
                 LockOverlay.BorderSizePixel = 0
                 LockOverlay.Size = UDim2.new(1, 0, 1, 0)
                 LockOverlay.Position = UDim2.new(0, 0, 0, 0)
@@ -7675,17 +7675,6 @@ end
                 local LockCorner = Instance.new("UICorner")
                 LockCorner.CornerRadius = UDim.new(0, 2)
                 LockCorner.Parent = LockOverlay
-
-                -- PAID image
-                local LockImage = Instance.new("ImageLabel")
-                LockImage.BackgroundTransparency = 1
-                LockImage.AnchorPoint = Vector2.new(0.5, 0.5)
-                LockImage.Size = UDim2.new(0.8, 0, 0.75, 0)
-                LockImage.Position = UDim2.new(0.5, 0, 0.5, 0)
-                LockImage.Image = "rbxassetid://118592764253807"
-                LockImage.ScaleType = Enum.ScaleType.Fit
-                LockImage.ZIndex = 51
-                LockImage.Parent = LockOverlay
 
                 -- Click fires a notification
                 LockOverlay.MouseButton1Click:Connect(function()
@@ -7898,15 +7887,41 @@ end
 
             Tab.Tabboxes[Info.Name or ""] = Tabbox
 
+            -- Lock / PAID overlay
+            if Info.Lock == true then
+                -- Overlay frame (blocks all input underneath)
+                local LockOverlay = Instance.new("TextButton")
+                LockOverlay.Name = "LockOverlay"
+                LockOverlay.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+                LockOverlay.BackgroundTransparency = 0.87
+                LockOverlay.BorderSizePixel = 0
+                LockOverlay.Size = UDim2.new(1, 0, 1, 0)
+                LockOverlay.Position = UDim2.new(0, 0, 0, 0)
+                LockOverlay.ZIndex = 50
+                LockOverlay.AutoButtonColor = false
+                LockOverlay.Text = ""
+                LockOverlay.Parent = BoxOuter
+
+                -- UICorner to match the tabbox shape
+                local LockCorner = Instance.new("UICorner")
+                LockCorner.CornerRadius = UDim.new(0, 2)
+                LockCorner.Parent = LockOverlay
+
+                -- Click fires a notification
+                LockOverlay.MouseButton1Click:Connect(function()
+                    Library:Notify("[⭐] Purchase to Unlock Feature", nil, 4590657391)
+                end)
+            end
+
             return Tabbox
         end
 
-        function Tab:AddLeftTabbox(Name)
-            return Tab:AddTabbox({ Name = Name, Side = 1; })
+        function Tab:AddLeftTabbox(Name, Lock)
+            return Tab:AddTabbox({ Name = Name, Side = 1, Lock = Lock; })
         end
 
-        function Tab:AddRightTabbox(Name)
-            return Tab:AddTabbox({ Name = Name, Side = 2; })
+        function Tab:AddRightTabbox(Name, Lock)
+            return Tab:AddTabbox({ Name = Name, Side = 2, Lock = Lock; })
         end
 
         TabButton.InputBegan:Connect(function(Input)
