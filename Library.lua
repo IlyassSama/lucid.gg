@@ -7365,10 +7365,10 @@ function Library:CreateWindow(...)
                 ImageColor3 = "FontColor";
             })
 
-            -- Hidden label for compatibility
+            -- Hidden label for hover reveal
             TabButtonLabel = Library:CreateLabel({
                 Position = UDim2.new(0, 0, 0, 0);
-                Size = UDim2.new(0, 0, 0, 0);
+                Size = UDim2.new(1, 0, 1, -1);
                 Text = Tab.Name;
                 Visible = false;
                 ZIndex = 1;
@@ -7732,23 +7732,27 @@ end
             })
 
             local TitleTextWidth = select(2, Library:GetTextBounds(Info.Name, Library.Font, 14, Vector2.new(9999, 9999)))
+            local LeftLineLength = 12
+            local TitlePadding = 4
 
             -- Left Highlight piece
             local HighlightLeft = Library:Create("Frame", {
                 BackgroundColor3 = Library.AccentColor;
                 BorderSizePixel = 0;
-                Size = UDim2.new(0, 4, 0, 2);
+                Size = UDim2.new(0, LeftLineLength, 0, 2);
                 Position = UDim2.new(0, 0, 0, 0);
                 ZIndex = 5;
                 Parent = BoxInner;
             })
 
+            local RightLineStart = LeftLineLength + TitlePadding + TitleTextWidth + TitlePadding
+
             -- Right Highlight piece
             local HighlightRight = Library:Create("Frame", {
                 BackgroundColor3 = Library.AccentColor;
                 BorderSizePixel = 0;
-                Size = UDim2.new(1, -(4 + TitleTextWidth + 4), 0, 2);
-                Position = UDim2.new(0, 4 + TitleTextWidth + 4, 0, 0);
+                Size = UDim2.new(1, -RightLineStart, 0, 2);
+                Position = UDim2.new(0, RightLineStart, 0, 0);
                 ZIndex = 5;
                 Parent = BoxInner;
             })
@@ -7759,7 +7763,7 @@ end
             -- Title without opaque background
             local GroupboxLabel = Library:CreateLabel({
                 Size = UDim2.new(0, TitleTextWidth, 0, 18);
-                Position = UDim2.new(0, 6, 0, -8);
+                Position = UDim2.new(0, LeftLineLength + TitlePadding, 0, -8);
                 TextSize = 14;
                 Text = Info.Name;
                 TextXAlignment = Enum.TextXAlignment.Center;
