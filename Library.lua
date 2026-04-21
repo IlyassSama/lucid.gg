@@ -7368,8 +7368,10 @@ function Library:CreateWindow(...)
             -- Hidden label for hover reveal
             TabButtonLabel = Library:CreateLabel({
                 Position = UDim2.new(0, 0, 0, 0);
-                Size = UDim2.new(1, 0, 1, -1);
+                Size = UDim2.new(1, 0, 1, 0);
                 Text = Tab.Name;
+                TextXAlignment = Enum.TextXAlignment.Center;
+                TextYAlignment = Enum.TextYAlignment.Center;
                 Visible = false;
                 ZIndex = 1;
                 Parent = TabButton;
@@ -7731,7 +7733,7 @@ end
                 BackgroundColor3 = "BackgroundColor";
             })
 
-            local TitleTextWidth = select(2, Library:GetTextBounds(Info.Name, Library.Font, 14, Vector2.new(9999, 9999)))
+            local TitleTextWidth = Library:GetTextBounds(Info.Name, Library.Font, 14)
             local LeftLineLength = 12
             local TitlePadding = 4
 
@@ -8433,7 +8435,7 @@ Library:GiveSignal(Players.PlayerRemoving:Connect(OnPlayerChange))
 Library:GiveSignal(Teams.ChildAdded:Connect(OnTeamChange))
 Library:GiveSignal(Teams.ChildRemoved:Connect(OnTeamChange))
 
---// Rainbow Handler \\-
+--// Rainbow Handler \\--
 local RainbowStep = 0
 local Hue = 0
 
