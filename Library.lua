@@ -3519,8 +3519,10 @@ do
 
             Library:Create("UIGradient", {
                 Color = ColorSequence.new({
-                    ColorSequenceKeypoint.new(0, Color3.new(1, 1, 1)),
-                    ColorSequenceKeypoint.new(1, Color3.fromRGB(212, 212, 212))
+                    ColorSequenceKeypoint.new(0, Color3.fromRGB(185, 185, 185)),
+                    ColorSequenceKeypoint.new(0.1, Color3.fromRGB(215, 215, 215)),
+                    ColorSequenceKeypoint.new(0.9, Color3.new(1, 1, 1)),
+                    ColorSequenceKeypoint.new(1, Color3.fromRGB(240, 240, 240))
                 });
                 Rotation = 90;
                 Parent = Inner;
@@ -3805,8 +3807,10 @@ do
 
         Library:Create("UIGradient", {
             Color = ColorSequence.new({
-                ColorSequenceKeypoint.new(0, Color3.new(1, 1, 1)),
-                ColorSequenceKeypoint.new(1, Color3.fromRGB(212, 212, 212))
+                ColorSequenceKeypoint.new(0, Color3.fromRGB(185, 185, 185)),
+                ColorSequenceKeypoint.new(0.1, Color3.fromRGB(215, 215, 215)),
+                ColorSequenceKeypoint.new(0.9, Color3.new(1, 1, 1)),
+                ColorSequenceKeypoint.new(1, Color3.fromRGB(240, 240, 240))
             });
             Rotation = 90;
             Parent = TextBoxInner;
@@ -4295,6 +4299,17 @@ do
             BorderColor3 = "OutlineColor";
         })
 
+        Library:Create("UIGradient", {
+            Color = ColorSequence.new({
+                ColorSequenceKeypoint.new(0, Color3.fromRGB(185, 185, 185)),
+                ColorSequenceKeypoint.new(0.1, Color3.fromRGB(215, 215, 215)),
+                ColorSequenceKeypoint.new(0.9, Color3.new(1, 1, 1)),
+                ColorSequenceKeypoint.new(1, Color3.fromRGB(240, 240, 240))
+            });
+            Rotation = 90;
+            Parent = SliderInner;
+        })
+
         local Fill = Library:Create("Frame", {
             BackgroundColor3 = Library.AccentColor;
             BorderColor3 = Library.AccentColorDark;
@@ -4574,10 +4589,34 @@ do
     function BaseGroupboxFuncs:AddDropdown(Idx, Info)
         Info.ReturnInstanceInstead = if typeof(Info.ReturnInstanceInstead) == "boolean" then Info.ReturnInstanceInstead else false
 
+        -- Helper to extract text and icon from a dropdown value
+        local function ResolveDropdownValue(Value)
+            if typeof(Value) == "table" and Value.Text then
+                return Value.Text, Value.Icon
+            elseif typeof(Value) == "Instance" then
+                return Value.Name, nil
+            else
+                return tostring(Value), nil
+            end
+        end
+
         if Info.SpecialType == "Player" then
             Info.ExcludeLocalPlayer = if typeof(Info.ExcludeLocalPlayer) == "boolean" then Info.ExcludeLocalPlayer else false
 
-            Info.Values = GetPlayers(Info.ExcludeLocalPlayer, Info.ReturnInstanceInstead)
+            if Info.ReturnInstanceInstead then
+                Info.Values = GetPlayers(Info.ExcludeLocalPlayer, true)
+            else
+                -- Build table values with player face icons
+                local playerList = GetPlayers(Info.ExcludeLocalPlayer, true)
+                local tableValues = {}
+                for _, player in next, playerList do
+                    table.insert(tableValues, {
+                        Text = player.Name,
+                        Icon = "rbxthumb://type=AvatarHeadShot&id=" .. player.UserId .. "&w=48&h=48"
+                    })
+                end
+                Info.Values = tableValues
+            end
             Info.AllowNull = true
         elseif Info.SpecialType == "Team" then
             Info.Values = GetTeams(Info.ReturnInstanceInstead)
@@ -4675,8 +4714,10 @@ do
 
         Library:Create("UIGradient", {
             Color = ColorSequence.new({
-                ColorSequenceKeypoint.new(0, Color3.new(1, 1, 1)),
-                ColorSequenceKeypoint.new(1, Color3.fromRGB(212, 212, 212))
+                ColorSequenceKeypoint.new(0, Color3.fromRGB(185, 185, 185)),
+                ColorSequenceKeypoint.new(0.1, Color3.fromRGB(215, 215, 215)),
+                ColorSequenceKeypoint.new(0.9, Color3.new(1, 1, 1)),
+                ColorSequenceKeypoint.new(1, Color3.fromRGB(240, 240, 240))
             });
             Rotation = 90;
             Parent = DropdownInner;
@@ -4721,6 +4762,18 @@ do
             Size = UDim2.new(0, 12, 0, 12);
             Image = CustomImageManager.GetAsset("DropdownArrow");
             ZIndex = 8;
+            Parent = DropdownInner;
+        })
+
+        -- Display icon for selected value (hidden by default)
+        local DisplayIcon = Library:Create("ImageLabel", {
+            AnchorPoint = Vector2.new(0, 0.5);
+            BackgroundTransparency = 1;
+            Position = UDim2.new(0, 5, 0.5, 0);
+            Size = UDim2.new(0, 14, 0, 14);
+            Image = "";
+            ZIndex = 8;
+            Visible = false;
             Parent = DropdownInner;
         })
 
@@ -4827,13 +4880,17 @@ do
         function Dropdown:Display()
             local Values = Dropdown.Values
             local Str = ""
+            local SelectedIcon = nil
 
             if Info.Multi then
                 for Idx, Value in next, Values do
-                    local StringValue = if typeof(Value) == "Instance" then Value.Name else Value
+                    local StringValue, IconValue = ResolveDropdownValue(Value)
 
                     if Dropdown.Value[Value] then
                         Str = Str .. (Info.FormatDisplayValue and tostring(Info.FormatDisplayValue(StringValue)) or StringValue) .. ", "
+                        if not SelectedIcon and IconValue then
+                            SelectedIcon = IconValue
+                        end
                     end
                 end
 
@@ -4842,11 +4899,33 @@ do
             else
                 if not Dropdown.Value then
                     ItemList.Text = "--"
+                    DisplayIcon.Visible = false
+                    ItemList.Position = UDim2.new(0, 5, 0, 0)
                     return
                 end
 
-                local StringValue = if typeof(Dropdown.Value) == "Instance" then Dropdown.Value.Name else Dropdown.Value
+                local StringValue, IconValue = ResolveDropdownValue(Dropdown.Value)
                 ItemList.Text = Info.FormatDisplayValue and tostring(Info.FormatDisplayValue(StringValue)) or StringValue
+                SelectedIcon = IconValue
+            end
+
+            -- Update display icon
+            if SelectedIcon then
+                local iconData = Library:GetCustomIcon(SelectedIcon)
+                if iconData then
+                    DisplayIcon.Image = iconData.Url or iconData
+                    DisplayIcon.ImageRectOffset = iconData.ImageRectOffset or Vector2.zero
+                    DisplayIcon.ImageRectSize = iconData.ImageRectSize or Vector2.zero
+                else
+                    DisplayIcon.Image = SelectedIcon
+                    DisplayIcon.ImageRectOffset = Vector2.zero
+                    DisplayIcon.ImageRectSize = Vector2.zero
+                end
+                DisplayIcon.Visible = true
+                ItemList.Position = UDim2.new(0, 23, 0, 0)
+            else
+                DisplayIcon.Visible = false
+                ItemList.Position = UDim2.new(0, 5, 0, 0)
             end
         end
 
@@ -4877,7 +4956,7 @@ do
 
             local Count = 0
             for Idx, Value in next, Values do
-                local StringValue = if typeof(Value) == "Instance" then Value.Name else Value
+                local StringValue, IconValue = ResolveDropdownValue(Value)
                 if Info.Searchable and not string.lower(StringValue):match(string.lower(DropdownInnerSearch.Text)) then
                     continue
                 end
@@ -4903,10 +4982,40 @@ do
                     BorderColor3 = "OutlineColor";
                 })
 
+                -- Add icon if present
+                local HasIcon = IconValue ~= nil
+                local labelOffsetX = 6
+                if HasIcon then
+                    local resolvedIcon = Library:GetCustomIcon(IconValue)
+                    local iconImage, iconRectOffset, iconRectSize
+                    if resolvedIcon then
+                        iconImage = resolvedIcon.Url or resolvedIcon
+                        iconRectOffset = resolvedIcon.ImageRectOffset or Vector2.zero
+                        iconRectSize = resolvedIcon.ImageRectSize or Vector2.zero
+                    else
+                        iconImage = IconValue
+                        iconRectOffset = Vector2.zero
+                        iconRectSize = Vector2.zero
+                    end
+
+                    Library:Create("ImageLabel", {
+                        AnchorPoint = Vector2.new(0, 0.5);
+                        BackgroundTransparency = 1;
+                        Position = UDim2.new(0, 4, 0.5, 0);
+                        Size = UDim2.new(0, 14, 0, 14);
+                        Image = iconImage;
+                        ImageRectOffset = iconRectOffset;
+                        ImageRectSize = iconRectSize;
+                        ZIndex = 25;
+                        Parent = Button;
+                    })
+                    labelOffsetX = 22
+                end
+
                 local ButtonLabel = Library:CreateLabel({
                     Active = false;
-                    Size = UDim2.new(1, -6, 1, 0);
-                    Position = UDim2.new(0, 6, 0, 0);
+                    Size = UDim2.new(1, -labelOffsetX, 1, 0);
+                    Position = UDim2.new(0, labelOffsetX, 0, 0);
                     TextSize = 14;
                     Text = Info.FormatDisplayValue and tostring(Info.FormatDisplayValue(StringValue)) or StringValue;
                     TextXAlignment = Enum.TextXAlignment.Left;
@@ -7213,7 +7322,10 @@ function Library:CreateWindow(...)
         return Dialog
     end
 
-    function Window:AddTab(Name)
+    function Window:AddTab(Name, Icon)
+        local UseIcon = Icon ~= nil and Icon ~= ""
+        local IconData = UseIcon and Library:GetCustomIcon(Icon) or nil
+
         local Tab = {
             Groupboxes = {};
             Tabboxes = {};
@@ -7226,17 +7338,23 @@ function Library:CreateWindow(...)
                 Title = "WARNING",
                 Text = ""
             };
-            OriginalName = Name; 
-            Name = Name;
+            OriginalName = Name or ""; 
+            Name = Name or "";
+            Icon = Icon;
             TableType = "Tab";
         }
 
-        local TabButtonWidth = Library:GetTextBounds(Tab.Name, Library.Font, 16)
+        local TabButtonWidth
+        if UseIcon and IconData then
+            TabButtonWidth = 30
+        else
+            TabButtonWidth = Library:GetTextBounds(Tab.Name, Library.Font, 16) + 8 + 4
+        end
 
         local TabButton = Library:Create("Frame", {
             BackgroundColor3 = Library.BackgroundColor;
             BorderColor3 = Library.OutlineColor;
-            Size = UDim2.new(0, TabButtonWidth + 8 + 4, 0.85, 0);
+            Size = if UseIcon and IconData then UDim2.new(0, 30, 0, 24) else UDim2.new(0, TabButtonWidth, 0.85, 0);
             ZIndex = 1;
             Parent = TabArea;
         })
@@ -7246,13 +7364,47 @@ function Library:CreateWindow(...)
             BorderColor3 = "OutlineColor";
         })
 
-        local TabButtonLabel = Library:CreateLabel({
-            Position = UDim2.new(0, 0, 0, 0);
-            Size = UDim2.new(1, 0, 1, -1);
-            Text = Tab.Name;
-            ZIndex = 1;
-            Parent = TabButton;
-        })
+        local TabButtonLabel
+        local TabButtonIcon
+
+        if UseIcon and IconData then
+            -- Icon-only tab
+            TabButtonIcon = Library:Create("ImageLabel", {
+                AnchorPoint = Vector2.new(0.5, 0.5);
+                BackgroundTransparency = 1;
+                Position = UDim2.new(0.5, 0, 0.5, 0);
+                Size = UDim2.new(0, 16, 0, 16);
+                Image = IconData.Url or IconData;
+                ImageRectOffset = IconData.ImageRectOffset or Vector2.zero;
+                ImageRectSize = IconData.ImageRectSize or Vector2.zero;
+                ImageColor3 = Library.FontColor;
+                ZIndex = 1;
+                Parent = TabButton;
+            })
+
+            Library:AddToRegistry(TabButtonIcon, {
+                ImageColor3 = "FontColor";
+            })
+
+            -- Hidden label for compatibility
+            TabButtonLabel = Library:CreateLabel({
+                Position = UDim2.new(0, 0, 0, 0);
+                Size = UDim2.new(0, 0, 0, 0);
+                Text = Tab.Name;
+                Visible = false;
+                ZIndex = 1;
+                Parent = TabButton;
+            })
+        else
+            -- Text-only tab (original behavior)
+            TabButtonLabel = Library:CreateLabel({
+                Position = UDim2.new(0, 0, 0, 0);
+                Size = UDim2.new(1, 0, 1, -1);
+                Text = Tab.Name;
+                ZIndex = 1;
+                Parent = TabButton;
+            })
+        end
 
         local Blocker = Library:Create("Frame", {
             BackgroundColor3 = Library.MainColor;
@@ -7556,9 +7708,10 @@ end
             if typeof(Name) == "string" then
                 Tab.Name = Name
 
-                local TabButtonWidth = Library:GetTextBounds(Tab.Name, Library.Font, 16)
-
-                TabButton.Size = UDim2.new(0, TabButtonWidth + 8 + 4, 0.85, 0)
+                if not (UseIcon and IconData) then
+                    local TabButtonWidth = Library:GetTextBounds(Tab.Name, Library.Font, 16)
+                    TabButton.Size = UDim2.new(0, TabButtonWidth + 8 + 4, 0.85, 0)
+                end
                 TabButtonLabel.Text = Tab.Name
             end
         end
@@ -7599,28 +7752,43 @@ end
                 BackgroundColor3 = "BackgroundColor";
             })
 
-            local Highlight = Library:Create("Frame", {
+            -- Horizontal accent line through title area (uwuware style)
+            local TitleLine = Library:Create("Frame", {
                 BackgroundColor3 = Library.AccentColor;
                 BorderSizePixel = 0;
-                Size = UDim2.new(1, 0, 0, 2);
+                Size = UDim2.new(1, 0, 0, 1);
+                Position = UDim2.new(0, 0, 0, 10);
                 ZIndex = 5;
                 Parent = BoxInner;
             })
 
-            Library:AddToRegistry(Highlight, {
+            Library:AddToRegistry(TitleLine, {
                 BackgroundColor3 = "AccentColor";
             })
 
-            -- local GroupboxLabel = 
-            Library:CreateLabel({
-                Size = UDim2.new(1, 0, 0, 18);
-                Position = UDim2.new(0, 4, 0, 2);
+            -- Groupbox title with opaque background to break the line
+            local GroupboxLabel = Library:CreateLabel({
+                AutomaticSize = Enum.AutomaticSize.X;
+                Size = UDim2.new(0, 0, 0, 18);
+                Position = UDim2.new(0, 4, 0, 1);
                 TextSize = 14;
                 Text = Info.Name;
-                TextXAlignment = Enum.TextXAlignment.Left;
-                ZIndex = 5;
+                TextXAlignment = Enum.TextXAlignment.Center;
+                BackgroundTransparency = 0;
+                BackgroundColor3 = Library.BackgroundColor;
+                ZIndex = 6;
                 Parent = BoxInner;
             })
+
+            Library:Create("UIPadding", {
+                PaddingLeft = UDim.new(0, 4);
+                PaddingRight = UDim.new(0, 4);
+                Parent = GroupboxLabel;
+            })
+
+            if Library.RegistryMap[GroupboxLabel] then
+                Library.RegistryMap[GroupboxLabel].Properties.BackgroundColor3 = "BackgroundColor"
+            end
 
             local Container = Library:Create("Frame", {
                 BackgroundTransparency = 1;
