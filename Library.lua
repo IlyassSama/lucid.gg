@@ -3519,10 +3519,8 @@ do
 
             Library:Create("UIGradient", {
                 Color = ColorSequence.new({
-                    ColorSequenceKeypoint.new(0, Color3.fromRGB(185, 185, 185)),
-                    ColorSequenceKeypoint.new(0.1, Color3.fromRGB(215, 215, 215)),
-                    ColorSequenceKeypoint.new(0.9, Color3.new(1, 1, 1)),
-                    ColorSequenceKeypoint.new(1, Color3.fromRGB(240, 240, 240))
+                    ColorSequenceKeypoint.new(0, Color3.new(1, 1, 1)),
+                    ColorSequenceKeypoint.new(1, Color3.fromRGB(212, 212, 212))
                 });
                 Rotation = 90;
                 Parent = Inner;
@@ -3807,10 +3805,8 @@ do
 
         Library:Create("UIGradient", {
             Color = ColorSequence.new({
-                ColorSequenceKeypoint.new(0, Color3.fromRGB(185, 185, 185)),
-                ColorSequenceKeypoint.new(0.1, Color3.fromRGB(215, 215, 215)),
-                ColorSequenceKeypoint.new(0.9, Color3.new(1, 1, 1)),
-                ColorSequenceKeypoint.new(1, Color3.fromRGB(240, 240, 240))
+                ColorSequenceKeypoint.new(0, Color3.new(1, 1, 1)),
+                ColorSequenceKeypoint.new(1, Color3.fromRGB(212, 212, 212))
             });
             Rotation = 90;
             Parent = TextBoxInner;
@@ -4299,17 +4295,6 @@ do
             BorderColor3 = "OutlineColor";
         })
 
-        Library:Create("UIGradient", {
-            Color = ColorSequence.new({
-                ColorSequenceKeypoint.new(0, Color3.fromRGB(185, 185, 185)),
-                ColorSequenceKeypoint.new(0.1, Color3.fromRGB(215, 215, 215)),
-                ColorSequenceKeypoint.new(0.9, Color3.new(1, 1, 1)),
-                ColorSequenceKeypoint.new(1, Color3.fromRGB(240, 240, 240))
-            });
-            Rotation = 90;
-            Parent = SliderInner;
-        })
-
         local Fill = Library:Create("Frame", {
             BackgroundColor3 = Library.AccentColor;
             BorderColor3 = Library.AccentColorDark;
@@ -4714,10 +4699,8 @@ do
 
         Library:Create("UIGradient", {
             Color = ColorSequence.new({
-                ColorSequenceKeypoint.new(0, Color3.fromRGB(185, 185, 185)),
-                ColorSequenceKeypoint.new(0.1, Color3.fromRGB(215, 215, 215)),
-                ColorSequenceKeypoint.new(0.9, Color3.new(1, 1, 1)),
-                ColorSequenceKeypoint.new(1, Color3.fromRGB(240, 240, 240))
+                ColorSequenceKeypoint.new(0, Color3.new(1, 1, 1)),
+                ColorSequenceKeypoint.new(1, Color3.fromRGB(212, 212, 212))
             });
             Rotation = 90;
             Parent = DropdownInner;
@@ -7344,17 +7327,13 @@ function Library:CreateWindow(...)
             TableType = "Tab";
         }
 
-        local TabButtonWidth
-        if UseIcon and IconData then
-            TabButtonWidth = 30
-        else
-            TabButtonWidth = Library:GetTextBounds(Tab.Name, Library.Font, 16) + 8 + 4
-        end
+        local TabButtonTextWidth = Library:GetTextBounds(Tab.Name, Library.Font, 16) + 8 + 4
+        local OriginalTabButtonWidth = (UseIcon and IconData) and 50 or TabButtonTextWidth
 
         local TabButton = Library:Create("Frame", {
             BackgroundColor3 = Library.BackgroundColor;
             BorderColor3 = Library.OutlineColor;
-            Size = if UseIcon and IconData then UDim2.new(0, 30, 0, 24) else UDim2.new(0, TabButtonWidth, 0.85, 0);
+            Size = UDim2.new(0, OriginalTabButtonWidth, 0.85, 0);
             ZIndex = 1;
             Parent = TabArea;
         })
@@ -7752,48 +7731,47 @@ end
                 BackgroundColor3 = "BackgroundColor";
             })
 
-            -- Horizontal accent line through title area (uwuware style)
-            local TitleLine = Library:Create("Frame", {
+            local TitleTextWidth = select(2, Library:GetTextBounds(Info.Name, Library.Font, 14, Vector2.new(9999, 9999)))
+
+            -- Left Highlight piece
+            local HighlightLeft = Library:Create("Frame", {
                 BackgroundColor3 = Library.AccentColor;
                 BorderSizePixel = 0;
-                Size = UDim2.new(1, 0, 0, 1);
-                Position = UDim2.new(0, 0, 0, 10);
+                Size = UDim2.new(0, 4, 0, 2);
+                Position = UDim2.new(0, 0, 0, 0);
                 ZIndex = 5;
                 Parent = BoxInner;
             })
 
-            Library:AddToRegistry(TitleLine, {
-                BackgroundColor3 = "AccentColor";
+            -- Right Highlight piece
+            local HighlightRight = Library:Create("Frame", {
+                BackgroundColor3 = Library.AccentColor;
+                BorderSizePixel = 0;
+                Size = UDim2.new(1, -(4 + TitleTextWidth + 4), 0, 2);
+                Position = UDim2.new(0, 4 + TitleTextWidth + 4, 0, 0);
+                ZIndex = 5;
+                Parent = BoxInner;
             })
 
-            -- Groupbox title with opaque background to break the line
+            Library:AddToRegistry(HighlightLeft, { BackgroundColor3 = "AccentColor"; })
+            Library:AddToRegistry(HighlightRight, { BackgroundColor3 = "AccentColor"; })
+
+            -- Title without opaque background
             local GroupboxLabel = Library:CreateLabel({
-                AutomaticSize = Enum.AutomaticSize.X;
-                Size = UDim2.new(0, 0, 0, 18);
-                Position = UDim2.new(0, 4, 0, 1);
+                Size = UDim2.new(0, TitleTextWidth, 0, 18);
+                Position = UDim2.new(0, 6, 0, -8);
                 TextSize = 14;
                 Text = Info.Name;
                 TextXAlignment = Enum.TextXAlignment.Center;
-                BackgroundTransparency = 0;
-                BackgroundColor3 = Library.BackgroundColor;
+                BackgroundTransparency = 1;
                 ZIndex = 6;
                 Parent = BoxInner;
             })
 
-            Library:Create("UIPadding", {
-                PaddingLeft = UDim.new(0, 4);
-                PaddingRight = UDim.new(0, 4);
-                Parent = GroupboxLabel;
-            })
-
-            if Library.RegistryMap[GroupboxLabel] then
-                Library.RegistryMap[GroupboxLabel].Properties.BackgroundColor3 = "BackgroundColor"
-            end
-
             local Container = Library:Create("Frame", {
                 BackgroundTransparency = 1;
-                Position = UDim2.new(0, 4, 0, 20);
-                Size = UDim2.new(1, -4, 1, -20);
+                Position = UDim2.new(0, 4, 0, 14);
+                Size = UDim2.new(1, -4, 1, -14);
                 ZIndex = 1;
                 Parent = BoxInner;
             })
@@ -8097,6 +8075,20 @@ end
                 Tab:ShowTab()
             end
         end)
+
+        if UseIcon and IconData then
+            TabButton.MouseEnter:Connect(function()
+                TabButtonIcon.Visible = false
+                TabButtonLabel.Visible = true
+                TabButton.Size = UDim2.new(0, TabButtonTextWidth, 0.85, 0)
+            end)
+            
+            TabButton.MouseLeave:Connect(function()
+                TabButtonIcon.Visible = true
+                TabButtonLabel.Visible = false
+                TabButton.Size = UDim2.new(0, OriginalTabButtonWidth, 0.85, 0)
+            end)
+        end
 
         TopBar:GetPropertyChangedSignal("Visible"):Connect(function()
             Tab:Resize()
