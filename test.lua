@@ -6616,262 +6616,267 @@ end
 
 function Library:LoadingScreen(game_name, duration)
     duration = tonumber(duration) or 4
-    duration = math.clamp(duration, 1.5, 30)
+    duration = math.clamp(duration, 2, 30)
 
     if Library.ActiveLoadingScreen and Library.ActiveLoadingScreen.Parent then
         Library.ActiveLoadingScreen:Destroy()
     end
 
-    local OverlayGui = Instance.new("ScreenGui")
-    OverlayGui.Name = "LucidGG_LoadingScreen"
-    OverlayGui.DisplayOrder = 10000
-    OverlayGui.IgnoreGuiInset = true
-    OverlayGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
-    ParentUI(OverlayGui, true)
-    Library.ActiveLoadingScreen = OverlayGui
+    local blur = Instance.new("BlurEffect")
+    blur.Size = 0
+    blur.Parent = game:GetService("Lighting")
 
-    local Dim = Library:Create("Frame", {
-        BackgroundColor3 = Color3.fromRGB(0, 0, 0);
-        BackgroundTransparency = 1;
-        BorderSizePixel = 0;
-        Size = UDim2.fromScale(1, 1);
-        ZIndex = 20000;
-        Parent = OverlayGui;
-    })
+    local loader = Instance.new("ScreenGui")
+    loader.Name = "LucidGG_LoadingScreen"
+    loader.DisplayOrder = 10000
+    loader.IgnoreGuiInset = true
+    loader.ZIndexBehavior = Enum.ZIndexBehavior.Global
+    ParentUI(loader, true)
+    Library.ActiveLoadingScreen = loader
 
-    local Content = Library:Create("Frame", {
-        AnchorPoint = Vector2.new(0.5, 0.5);
-        BackgroundTransparency = 1;
-        Position = UDim2.fromScale(0.5, 0.5);
-        Size = UDim2.fromOffset(700, 400);
-        ZIndex = 20001;
-        Parent = Dim;
-    })
+    local center = Instance.new("Frame")
+    center.Parent = loader
+    center.AnchorPoint = Vector2.new(0.5, 0.5)
+    center.BackgroundTransparency = 1
+    center.Position = UDim2.new(0.5, 0, 0.5, 0)
+    center.Size = UDim2.new(1, 0, 0, 200)
 
-    local Logo = Library:Create("ImageLabel", {
-        AnchorPoint = Vector2.new(0.5, 0.5);
-        BackgroundTransparency = 1;
-        Image = "rbxassetid://76132085526100";
-        Position = UDim2.fromScale(0.5, 0.42);
-        Size = UDim2.fromOffset(0, 0);
-        ScaleType = Enum.ScaleType.Fit;
-        ZIndex = 20005;
-        Parent = Content;
-    })
+    local texts = Instance.new("Frame")
+    texts.Parent = loader
+    texts.AnchorPoint = Vector2.new(0.5, 0.5)
+    texts.BackgroundTransparency = 1
+    texts.Position = UDim2.new(0.5, 0, 0.5, 0)
+    texts.Size = UDim2.new(1, 0, 0, 200)
 
-    local Ring = Library:Create("Frame", {
-        AnchorPoint = Vector2.new(0.5, 0.5);
-        BackgroundColor3 = Library.AccentColor;
-        BackgroundTransparency = 0.25;
-        BorderSizePixel = 0;
-        Position = UDim2.fromScale(0.5, 0.42);
-        Size = UDim2.fromOffset(20, 20);
-        ZIndex = 20003;
-        Parent = Content;
-    })
-    local RingCorner = Instance.new("UICorner")
-    RingCorner.CornerRadius = UDim.new(1, 0)
-    RingCorner.Parent = Ring
+    local textLayout = Instance.new("UIListLayout")
+    textLayout.Parent = texts
+    textLayout.FillDirection = Enum.FillDirection.Horizontal
+    textLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+    textLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    textLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+    textLayout.Padding = UDim.new(0, 15)
 
-    local RingStroke = Instance.new("UIStroke")
-    RingStroke.Color = Color3.fromRGB(255, 255, 255)
-    RingStroke.Thickness = 1.2
-    RingStroke.Transparency = 0.2
-    RingStroke.Parent = Ring
+    local overlay = Instance.new("Frame")
+    overlay.Parent = loader
+    overlay.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+    overlay.BackgroundTransparency = 1
+    overlay.BorderSizePixel = 0
+    overlay.Size = UDim2.fromScale(1, 1)
 
-    local Texts = Library:Create("Frame", {
-        AnchorPoint = Vector2.new(0.5, 0.5);
-        BackgroundTransparency = 1;
-        Position = UDim2.fromScale(0.5, 0.53);
-        Size = UDim2.fromOffset(620, 90);
-        ZIndex = 20010;
-        Parent = Content;
-    })
-    local TextList = Library:Create("UIListLayout", {
-        FillDirection = Enum.FillDirection.Horizontal;
-        HorizontalAlignment = Enum.HorizontalAlignment.Center;
-        VerticalAlignment = Enum.VerticalAlignment.Center;
-        SortOrder = Enum.SortOrder.LayoutOrder;
-        Padding = UDim.new(0, 1);
-        Parent = Texts;
-    })
+    local function createGlyph(char)
+        local holder = Instance.new("Frame")
+        holder.BackgroundTransparency = 1
+        holder.Size = UDim2.new(0, 56, 0, 100)
+        holder.ZIndex = 8
 
-    local function CreateTitleLetter(Char)
-        local LetterHolder = Library:Create("Frame", {
-            BackgroundTransparency = 1;
-            Size = UDim2.fromOffset(28, 40);
-            ZIndex = 20011;
-            Parent = Texts;
+        local label = Instance.new("TextLabel")
+        label.Parent = holder
+        label.AnchorPoint = Vector2.new(0.5, 0.5)
+        label.BackgroundTransparency = 1
+        label.Position = UDim2.new(0.5, 0, 0.5, 0)
+        label.Size = UDim2.new(0, 28, 0, 50)
+        label.ZIndex = 8
+        label.Font = Enum.Font.GothamBold
+        label.Text = char
+        label.TextColor3 = Color3.fromRGB(255, 255, 255)
+        label.TextSize = 50
+        label.TextWrapped = true
+        label.TextTransparency = 1
+
+        local gradient = Instance.new("UIGradient")
+        gradient.Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 116, 116)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(132, 58, 58)),
         })
-        local Letter = Library:CreateLabel({
-            AnchorPoint = Vector2.new(0.5, 0.5);
-            BackgroundTransparency = 1;
-            Position = UDim2.fromScale(0.5, 0.5);
-            Size = UDim2.fromScale(1, 1);
-            Text = Char;
-            TextSize = 34;
-            TextTransparency = 1;
-            TextYAlignment = Enum.TextYAlignment.Center;
-            ZIndex = 20012;
-            Parent = LetterHolder;
-        })
-        return Letter
+        gradient.Rotation = 88
+        gradient.Parent = label
+
+        local scale = Instance.new("UIScale")
+        scale.Scale = 3
+        scale.Parent = label
+
+        local textSize = TextService:GetTextSize(label.Text, label.TextSize, label.Font, Vector2.new(1920, 1080))
+        label.Size = UDim2.new(0, textSize.X + 100, 0, 50)
+        holder.Size = UDim2.new(0, (textSize.X * 2.5), 0, 100)
+
+        return holder, label
     end
 
-    local TitleText = "Lucid.gg"
-    local Letters = {}
-    for i = 1, #TitleText do
-        local Char = TitleText:sub(i, i)
-        table.insert(Letters, CreateTitleLetter(Char))
+    local trailingLetters = {}
+    local baseName = "ucid.gg"
+    for i = 1, #baseName do
+        local holder, label = createGlyph(baseName:sub(i, i))
+        holder.Parent = texts
+        label.Position = UDim2.new(0.5, 0, 0.5, 200)
+        table.insert(trailingLetters, label)
     end
-    task.defer(function()
-        TextList.Padding = UDim.new(0, 2)
-    end)
 
-    local Subtitle = Library:CreateLabel({
-        AnchorPoint = Vector2.new(0.5, 0.5);
-        BackgroundTransparency = 1;
-        Position = UDim2.fromScale(0.5, 0.64);
-        Size = UDim2.fromOffset(600, 30);
-        Text = tostring(game_name or "Unknown Game");
-        TextSize = 16;
-        TextTransparency = 1;
-        ZIndex = 20010;
-        Parent = Content;
+    local logoL = Instance.new("ImageLabel")
+    logoL.Parent = loader
+    logoL.AnchorPoint = Vector2.new(0.5, 0.5)
+    logoL.BackgroundTransparency = 1
+    logoL.Position = UDim2.new(0.5, 0, 0.5, 0)
+    logoL.Size = UDim2.fromOffset(20, 20)
+    logoL.Image = "rbxassetid://76132085526100"
+    logoL.ScaleType = Enum.ScaleType.Fit
+    logoL.ImageTransparency = 1
+    logoL.ZIndex = 9
+
+    local subtitle = Instance.new("TextLabel")
+    subtitle.Parent = loader
+    subtitle.AnchorPoint = Vector2.new(0.5, 0.5)
+    subtitle.BackgroundTransparency = 1
+    subtitle.Position = UDim2.new(0.5, 0, 0.62, 0)
+    subtitle.Size = UDim2.new(0, 500, 0, 26)
+    subtitle.Font = Enum.Font.GothamMedium
+    subtitle.Text = tostring(game_name or "Unknown Game")
+    subtitle.TextColor3 = Color3.fromRGB(220, 220, 220)
+    subtitle.TextSize = 17
+    subtitle.TextTransparency = 1
+    subtitle.ZIndex = 9
+
+    local status = Instance.new("TextLabel")
+    status.Parent = loader
+    status.AnchorPoint = Vector2.new(0.5, 0.5)
+    status.BackgroundTransparency = 1
+    status.Position = UDim2.new(0.5, 0, 0.74, 0)
+    status.Size = UDim2.new(0, 500, 0, 22)
+    status.Font = Enum.Font.Gotham
+    status.Text = ""
+    status.TextColor3 = Color3.fromRGB(230, 230, 230)
+    status.TextSize = 14
+    status.TextTransparency = 1
+    status.ZIndex = 9
+
+    local progressOuter = Instance.new("Frame")
+    progressOuter.Parent = loader
+    progressOuter.AnchorPoint = Vector2.new(0.5, 0.5)
+    progressOuter.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    progressOuter.BackgroundTransparency = 0.2
+    progressOuter.BorderSizePixel = 0
+    progressOuter.Position = UDim2.new(0.5, 0, 0.8, 0)
+    progressOuter.Size = UDim2.fromOffset(420, 16)
+    progressOuter.ZIndex = 9
+    progressOuter.ClipsDescendants = true
+
+    local progressOuterCorner = Instance.new("UICorner")
+    progressOuterCorner.CornerRadius = UDim.new(1, 0)
+    progressOuterCorner.Parent = progressOuter
+
+    local progressFill = Instance.new("Frame")
+    progressFill.Parent = progressOuter
+    progressFill.BackgroundColor3 = Color3.fromRGB(255, 116, 116)
+    progressFill.BorderSizePixel = 0
+    progressFill.Size = UDim2.new(0, 0, 1, 0)
+    progressFill.ZIndex = 10
+
+    local progressFillCorner = Instance.new("UICorner")
+    progressFillCorner.CornerRadius = UDim.new(1, 0)
+    progressFillCorner.Parent = progressFill
+
+    local shine = Instance.new("Frame")
+    shine.Parent = progressFill
+    shine.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    shine.BackgroundTransparency = 0.65
+    shine.BorderSizePixel = 0
+    shine.Position = UDim2.new(-0.2, 0, 0, 0)
+    shine.Size = UDim2.new(0.2, 0, 1, 0)
+
+    local shineGradient = Instance.new("UIGradient")
+    shineGradient.Parent = shine
+    shineGradient.Rotation = 20
+    shineGradient.Transparency = NumberSequence.new({
+        NumberSequenceKeypoint.new(0, 1),
+        NumberSequenceKeypoint.new(0.5, 0),
+        NumberSequenceKeypoint.new(1, 1),
     })
 
-    local StatusText = Library:CreateLabel({
-        AnchorPoint = Vector2.new(0.5, 0.5);
-        BackgroundTransparency = 1;
-        Position = UDim2.fromScale(0.5, 0.77);
-        Size = UDim2.fromOffset(600, 22);
-        Text = "";
-        TextSize = 14;
-        TextTransparency = 1;
-        ZIndex = 20010;
-        Parent = Content;
-    })
-
-    local ProgressOuter = Library:Create("Frame", {
-        AnchorPoint = Vector2.new(0.5, 0.5);
-        BackgroundColor3 = Color3.fromRGB(20, 20, 20);
-        BorderColor3 = Library.OutlineColor;
-        Position = UDim2.fromScale(0.5, 0.83);
-        Size = UDim2.fromOffset(380, 14);
-        ZIndex = 20010;
-        Parent = Content;
-    })
-    local ProgressInner = Library:Create("Frame", {
-        BackgroundColor3 = Color3.fromRGB(8, 8, 8);
-        BorderColor3 = Color3.fromRGB(0, 0, 0);
-        BorderMode = Enum.BorderMode.Inset;
-        Size = UDim2.new(1, 0, 1, 0);
-        ZIndex = 20011;
-        Parent = ProgressOuter;
-    })
-    local ProgressFill = Library:Create("Frame", {
-        BackgroundColor3 = Library.AccentColor;
-        BorderSizePixel = 0;
-        Size = UDim2.new(0, 0, 1, 0);
-        ZIndex = 20012;
-        Parent = ProgressInner;
-    })
-
-    TweenService:Create(Dim, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-        BackgroundTransparency = 0.25
+    TweenService:Create(blur, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+        Size = 60
+    }):Play()
+    TweenService:Create(overlay, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+        BackgroundTransparency = 0.75
     }):Play()
 
-    local logoPhase = math.max(0.75, duration * 0.25)
-    local textPhase = math.max(0.8, duration * 0.25)
-    local progressPhase = math.max(1.2, duration - logoPhase - textPhase)
-
-    TweenService:Create(Logo, TweenInfo.new(0.45, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-        Size = UDim2.fromOffset(180, 180),
-        Rotation = 3
-    }):Play()
-    TweenService:Create(Ring, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-        Size = UDim2.fromOffset(230, 230),
-        BackgroundTransparency = 0.95
+    TweenService:Create(logoL, TweenInfo.new(0.45, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+        ImageTransparency = 0,
+        Size = UDim2.fromOffset(120, 120)
     }):Play()
 
-    local crazyStart = tick()
-    while tick() - crazyStart < logoPhase do
-        local elapsed = tick() - crazyStart
-        Logo.Rotation = math.sin(elapsed * 8) * 5
-        task.wait(0.016)
-    end
-    Logo.Rotation = 0
-    Ring.Visible = false
+    task.wait(0.45)
 
-    local letterDuration = math.max(0.05, textPhase / (#Letters + 2))
-    for i, Letter in ipairs(Letters) do
-        TweenService:Create(Letter, TweenInfo.new(0.18, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-            TextTransparency = 0,
-            Position = UDim2.new(0.5, 0, 0.5, 0)
+    local firstSlotX = texts.AbsolutePosition.X + 35
+    local firstSlotY = texts.AbsolutePosition.Y + 50 + math.abs(loader.AbsolutePosition.Y)
+    TweenService:Create(logoL, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+        Position = UDim2.fromOffset(firstSlotX, firstSlotY),
+        Size = UDim2.fromOffset(86, 86)
+    }):Play()
+
+    task.wait(0.5)
+
+    for _, letter in ipairs(trailingLetters) do
+        TweenService:Create(letter, TweenInfo.new(0.65, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+            Position = UDim2.new(0.5, 0, 0.5, 0),
+            TextTransparency = 0
         }):Play()
-        if i % 2 == 0 then
-            Logo.ImageTransparency = 0.06
-            task.wait(letterDuration * 0.25)
-            Logo.ImageTransparency = 0
-        end
-        task.wait(letterDuration)
     end
 
-    TweenService:Create(Subtitle, TweenInfo.new(0.22, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-        TextTransparency = 0
-    }):Play()
-    TweenService:Create(StatusText, TweenInfo.new(0.22, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-        TextTransparency = 0
-    }):Play()
-    task.wait(0.08)
+    TweenService:Create(subtitle, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { TextTransparency = 0 }):Play()
+    TweenService:Create(status, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { TextTransparency = 0 }):Play()
 
-    local StatusSteps = {
+    local steps = {
         "Loading Dependencies",
         "Loading Modules",
         "Initializing UI",
         "Finalizing",
     }
 
-    TweenService:Create(ProgressFill, TweenInfo.new(progressPhase, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {
+    local introTime = 1.6
+    local progressDuration = math.max(1.2, duration - introTime)
+    TweenService:Create(progressFill, TweenInfo.new(progressDuration, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {
         Size = UDim2.new(1, 0, 1, 0)
     }):Play()
 
-    local perStep = progressPhase / #StatusSteps
-    for _, Step in ipairs(StatusSteps) do
-        StatusText.Text = Step
+    task.spawn(function()
+        while loader.Parent and progressFill.Size.X.Scale < 0.99 do
+            local shineTween = TweenService:Create(shine, TweenInfo.new(0.45, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {
+                Position = UDim2.new(1, 0, 0, 0)
+            })
+            shine.Position = UDim2.new(-0.2, 0, 0, 0)
+            shineTween:Play()
+            shineTween.Completed:Wait()
+            task.wait(0.08)
+        end
+    end)
+
+    local perStep = progressDuration / #steps
+    for _, stepText in ipairs(steps) do
+        status.Text = stepText
         task.wait(perStep)
     end
+    status.Text = "Ready"
 
-    StatusText.Text = "Ready"
-    task.wait(0.1)
+    task.wait(0.15)
 
-    TweenService:Create(Content, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-        Position = UDim2.fromScale(0.5, 0.52)
-    }):Play()
-    TweenService:Create(Dim, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+    TweenService:Create(logoL, TweenInfo.new(1.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In), { ImageTransparency = 1 }):Play()
+    for _, letter in ipairs(trailingLetters) do
+        TweenService:Create(letter, TweenInfo.new(1.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In), { TextTransparency = 1 }):Play()
+    end
+    TweenService:Create(subtitle, TweenInfo.new(1.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In), { TextTransparency = 1 }):Play()
+    TweenService:Create(status, TweenInfo.new(1.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In), { TextTransparency = 1 }):Play()
+    TweenService:Create(blur, TweenInfo.new(1.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In), { Size = 0 }):Play()
+    TweenService:Create(overlay, TweenInfo.new(1.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
         BackgroundTransparency = 1
     }):Play()
+    task.wait(1.3)
 
-    for _, Letter in ipairs(Letters) do
-        TweenService:Create(Letter, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-            TextTransparency = 1
-        }):Play()
+    if blur and blur.Parent then
+        blur:Destroy()
     end
-    TweenService:Create(Logo, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-        ImageTransparency = 1
-    }):Play()
-    TweenService:Create(Subtitle, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-        TextTransparency = 1
-    }):Play()
-    TweenService:Create(StatusText, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-        TextTransparency = 1
-    }):Play()
-    task.wait(0.22)
-
-    if OverlayGui.Parent then
-        OverlayGui:Destroy()
+    if loader and loader.Parent then
+        loader:Destroy()
     end
-    if Library.ActiveLoadingScreen == OverlayGui then
+    if Library.ActiveLoadingScreen == loader then
         Library.ActiveLoadingScreen = nil
     end
 end
@@ -7794,12 +7799,20 @@ do
             HorizontalAlignment = Enum.HorizontalAlignment.Center;
             Parent = LeftSide;
         })
+        Library:Create("UIPadding", {
+            PaddingTop = UDim.new(0, 2);
+            Parent = LeftSide;
+        })
 
         Library:Create("UIListLayout", {
             Padding = UDim.new(0, 8);
             FillDirection = Enum.FillDirection.Vertical;
             SortOrder = Enum.SortOrder.LayoutOrder;
             HorizontalAlignment = Enum.HorizontalAlignment.Center;
+            Parent = RightSide;
+        })
+        Library:Create("UIPadding", {
+            PaddingTop = UDim.new(0, 2);
             Parent = RightSide;
         })
 
@@ -7998,15 +8011,13 @@ end
             local TitleTextWidth = Library:GetTextBounds(Info.Name, Library.Font, 14)
             local LeftLineLength = 12
             local TitlePadding = 4
-            local HeaderHeight = math.max(20, math.floor((20 * DPIScale) + 0.5))
-            local HeaderLineY = math.max(0, math.floor((HeaderHeight - 2) * 0.5))
 
             -- Left Highlight piece
             local HighlightLeft = Library:Create("Frame", {
                 BackgroundColor3 = Library.AccentColor;
                 BorderSizePixel = 0;
                 Size = UDim2.new(0, LeftLineLength, 0, 2);
-                Position = UDim2.new(0, 0, 0, HeaderLineY);
+                Position = UDim2.new(0, 0, 0, 0);
                 ZIndex = 5;
                 Parent = BoxInner;
             })
@@ -8018,7 +8029,7 @@ end
                 BackgroundColor3 = Library.AccentColor;
                 BorderSizePixel = 0;
                 Size = UDim2.new(1, -RightLineStart, 0, 2);
-                Position = UDim2.new(0, RightLineStart, 0, HeaderLineY);
+                Position = UDim2.new(0, RightLineStart, 0, 0);
                 ZIndex = 5;
                 Parent = BoxInner;
             })
@@ -8028,8 +8039,8 @@ end
 
             -- Title without opaque background
             local GroupboxLabel = Library:CreateLabel({
-                Size = UDim2.new(0, TitleTextWidth, 0, HeaderHeight);
-                Position = UDim2.new(0, LeftLineLength + TitlePadding, 0, 0);
+                Size = UDim2.new(0, TitleTextWidth, 0, 18);
+                Position = UDim2.new(0, LeftLineLength + TitlePadding, 0, -8);
                 TextSize = 14;
                 Text = Info.Name;
                 TextXAlignment = Enum.TextXAlignment.Center;
@@ -8040,8 +8051,8 @@ end
 
             local Container = Library:Create("Frame", {
                 BackgroundTransparency = 1;
-                Position = UDim2.new(0, 4, 0, HeaderHeight);
-                Size = UDim2.new(1, -4, 1, -HeaderHeight);
+                Position = UDim2.new(0, 4, 0, 14);
+                Size = UDim2.new(1, -4, 1, -14);
                 ZIndex = 1;
                 Parent = BoxInner;
             })
@@ -8061,7 +8072,7 @@ end
                     end
                 end
 
-                BoxOuter.Size = UDim2.new(1, 0, 0, (HeaderHeight + Size) + 2 + 2)
+                BoxOuter.Size = UDim2.new(1, 0, 0, (20 * DPIScale + Size) + 2 + 2)
             end
 
             Groupbox.Container = Container
