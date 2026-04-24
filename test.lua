@@ -6642,15 +6642,15 @@ function Library:LoadingScreen(game_name, duration)
     titleWrap.Parent = loader
     titleWrap.AnchorPoint = Vector2.new(0.5, 0.5)
     titleWrap.BackgroundTransparency = 1
-    titleWrap.Position = UDim2.new(0.5, 0, 0.47, 0)
-    titleWrap.Size = UDim2.fromOffset(620, 130)
+    titleWrap.Position = UDim2.new(0.5, 0, 0.45, 0)
+    titleWrap.Size = UDim2.fromOffset(700, 150)
     titleWrap.ZIndex = 7
 
     local lettersFrame = Instance.new("Frame")
     lettersFrame.Parent = titleWrap
     lettersFrame.BackgroundTransparency = 1
     lettersFrame.Position = UDim2.fromOffset(190, 0)
-    lettersFrame.Size = UDim2.fromOffset(420, 130)
+    lettersFrame.Size = UDim2.fromOffset(480, 150)
     lettersFrame.ZIndex = 8
 
     local lettersLayout = Instance.new("UIListLayout")
@@ -6659,12 +6659,12 @@ function Library:LoadingScreen(game_name, duration)
     lettersLayout.HorizontalAlignment = Enum.HorizontalAlignment.Left
     lettersLayout.VerticalAlignment = Enum.VerticalAlignment.Center
     lettersLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    lettersLayout.Padding = UDim.new(0, 2)
+    lettersLayout.Padding = UDim.new(0, 0)
 
     local function createGlyph(char, textSize)
         local holder = Instance.new("Frame")
         holder.BackgroundTransparency = 1
-        holder.Size = UDim2.new(0, 56, 0, 130)
+        holder.Size = UDim2.new(0, 56, 0, 150)
         holder.ZIndex = 9
 
         local label = Instance.new("TextLabel")
@@ -6672,20 +6672,20 @@ function Library:LoadingScreen(game_name, duration)
         label.AnchorPoint = Vector2.new(0.5, 0.5)
         label.BackgroundTransparency = 1
         label.Position = UDim2.new(0.5, 0, 0.5, 0)
-        label.Size = UDim2.new(0, 28, 0, 64)
+        label.Size = UDim2.new(0, 28, 0, 72)
         label.ZIndex = 10
         label.Font = Enum.Font.GothamBold
         label.Text = char
         label.TextColor3 = Color3.fromRGB(255, 255, 255)
-        label.TextSize = textSize or 64
+        label.TextSize = textSize or 74
         label.TextWrapped = true
         label.TextTransparency = 1
         label.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
         label.TextStrokeTransparency = 0
 
         local textSize = TextService:GetTextSize(label.Text, label.TextSize, label.Font, Vector2.new(1920, 1080))
-        label.Size = UDim2.new(0, textSize.X + 30, 0, 64)
-        holder.Size = UDim2.new(0, textSize.X + 24, 0, 130)
+        label.Size = UDim2.new(0, textSize.X + 8, 0, 72)
+        holder.Size = UDim2.new(0, textSize.X + 6, 0, 150)
 
         local shadow = label:Clone()
         shadow.Name = "Shadow"
@@ -6702,7 +6702,7 @@ function Library:LoadingScreen(game_name, duration)
     local trailingShadows = {}
     local baseName = "UCID.GG"
     for i = 1, #baseName do
-        local holder, label, shadow = createGlyph(baseName:sub(i, i), 64)
+        local holder, label, shadow = createGlyph(baseName:sub(i, i), 74)
         holder.Parent = lettersFrame
         label.Position = UDim2.new(0.5, 0, 0.5, 200)
         shadow.Position = UDim2.new(0.5, 2, 0.5, 202)
@@ -6725,12 +6725,12 @@ function Library:LoadingScreen(game_name, duration)
     subtitle.Parent = loader
     subtitle.AnchorPoint = Vector2.new(0.5, 0.5)
     subtitle.BackgroundTransparency = 1
-    subtitle.Position = UDim2.new(0.5, 0, 0.64, 0)
-    subtitle.Size = UDim2.new(0, 500, 0, 26)
-    subtitle.Font = Enum.Font.GothamMedium
+    subtitle.Position = UDim2.new(0.5, 0, 0.6, 0)
+    subtitle.Size = UDim2.new(0, 640, 0, 26)
+    subtitle.Font = Enum.Font.GothamSemibold
     subtitle.Text = tostring(game_name or "Unknown Game")
     subtitle.TextColor3 = Color3.fromRGB(255, 255, 255)
-    subtitle.TextSize = 16
+    subtitle.TextSize = 18
     subtitle.TextTransparency = 1
     subtitle.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
     subtitle.TextStrokeTransparency = 0
@@ -6740,12 +6740,12 @@ function Library:LoadingScreen(game_name, duration)
     status.Parent = loader
     status.AnchorPoint = Vector2.new(0.5, 0.5)
     status.BackgroundTransparency = 1
-    status.Position = UDim2.new(0.5, 0, 0.75, 0)
+    status.Position = UDim2.new(0.5, 0, 0.77, 0)
     status.Size = UDim2.new(0, 500, 0, 22)
     status.Font = Enum.Font.Gotham
     status.Text = ""
     status.TextColor3 = Color3.fromRGB(255, 255, 255)
-    status.TextSize = 14
+    status.TextSize = 13
     status.TextTransparency = 1
     status.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
     status.TextStrokeTransparency = 0
@@ -6754,11 +6754,11 @@ function Library:LoadingScreen(game_name, duration)
     local progressOuter = Instance.new("Frame")
     progressOuter.Parent = loader
     progressOuter.AnchorPoint = Vector2.new(0.5, 0.5)
-    progressOuter.BackgroundColor3 = Color3.fromRGB(14, 14, 14)
-    progressOuter.BackgroundTransparency = 0.25
+    progressOuter.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    progressOuter.BackgroundTransparency = 0.45
     progressOuter.BorderSizePixel = 0
-    progressOuter.Position = UDim2.new(0.5, 0, 0.81, 0)
-    progressOuter.Size = UDim2.fromOffset(390, 10)
+    progressOuter.Position = UDim2.new(0.5, 0, 0.8, 0)
+    progressOuter.Size = UDim2.fromOffset(390, 8)
     progressOuter.ZIndex = 9
     progressOuter.ClipsDescendants = true
 
@@ -6768,7 +6768,7 @@ function Library:LoadingScreen(game_name, duration)
 
     local progressFill = Instance.new("Frame")
     progressFill.Parent = progressOuter
-    progressFill.BackgroundColor3 = Color3.fromRGB(80, 170, 255)
+    progressFill.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     progressFill.BorderSizePixel = 0
     progressFill.Size = UDim2.new(0, 0, 1, 0)
     progressFill.ZIndex = 10
@@ -6777,32 +6777,15 @@ function Library:LoadingScreen(game_name, duration)
     progressFillCorner.CornerRadius = UDim.new(1, 0)
     progressFillCorner.Parent = progressFill
 
-    local shine = Instance.new("Frame")
-    shine.Parent = progressFill
-    shine.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    shine.BackgroundTransparency = 0.45
-    shine.BorderSizePixel = 0
-    shine.Position = UDim2.new(-0.2, 0, 0, 0)
-    shine.Size = UDim2.new(0.2, 0, 1, 0)
-
-    local shineGradient = Instance.new("UIGradient")
-    shineGradient.Parent = shine
-    shineGradient.Rotation = 20
-    shineGradient.Transparency = NumberSequence.new({
-        NumberSequenceKeypoint.new(0, 1),
-        NumberSequenceKeypoint.new(0.5, 0.1),
-        NumberSequenceKeypoint.new(1, 1),
-    })
-
     local percentLabel = Instance.new("TextLabel")
     percentLabel.Parent = loader
     percentLabel.AnchorPoint = Vector2.new(0, 0.5)
     percentLabel.BackgroundTransparency = 1
-    percentLabel.Position = UDim2.new(0.5, 205, 0.81, 0)
+    percentLabel.Position = UDim2.new(0.5, 205, 0.8, 0)
     percentLabel.Size = UDim2.fromOffset(50, 16)
     percentLabel.Font = Enum.Font.GothamBold
     percentLabel.Text = "0%"
-    percentLabel.TextColor3 = Color3.fromRGB(80, 170, 255)
+    percentLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     percentLabel.TextSize = 13
     percentLabel.TextXAlignment = Enum.TextXAlignment.Left
     percentLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
@@ -6811,19 +6794,19 @@ function Library:LoadingScreen(game_name, duration)
     percentLabel.ZIndex = 11
 
     TweenService:Create(overlay, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-        BackgroundTransparency = 0.35
+        BackgroundTransparency = 0.18
     }):Play()
 
     TweenService:Create(logoL, TweenInfo.new(0.45, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
         ImageTransparency = 0,
-        Size = UDim2.fromOffset(126, 126)
+        Size = UDim2.fromOffset(142, 142)
     }):Play()
 
     task.wait(0.5)
 
     TweenService:Create(logoL, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-        Position = UDim2.fromOffset(102, 66),
-        Size = UDim2.fromOffset(92, 92)
+        Position = UDim2.fromOffset(135, 76),
+        Size = UDim2.fromOffset(104, 104)
     }):Play()
 
     task.wait(0.38)
@@ -6843,30 +6826,11 @@ function Library:LoadingScreen(game_name, duration)
     TweenService:Create(status, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { TextTransparency = 0.1 }):Play()
     TweenService:Create(percentLabel, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { TextTransparency = 0 }):Play()
 
-    local steps = {
-        "Loading UI Framework...",
-        "Loading Dependencies...",
-        "Initializing UI",
-        "Finalizing...",
-    }
-
-    local introTime = 1.35
-    local progressDuration = math.max(1.2, duration - introTime)
-    TweenService:Create(progressFill, TweenInfo.new(progressDuration, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {
-        Size = UDim2.new(1, 0, 1, 0)
-    }):Play()
-
-    task.spawn(function()
-        while loader.Parent and progressFill.Size.X.Scale < 0.99 do
-            local shineTween = TweenService:Create(shine, TweenInfo.new(0.45, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {
-                Position = UDim2.new(1, 0, 0, 0)
-            })
-            shine.Position = UDim2.new(-0.2, 0, 0, 0)
-            shineTween:Play()
-            shineTween.Completed:Wait()
-            task.wait(0.08)
-        end
-    end)
+    local function setProgress(target, tweenTime)
+        TweenService:Create(progressFill, TweenInfo.new(tweenTime, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {
+            Size = UDim2.new(math.clamp(target, 0, 1), 0, 1, 0)
+        }):Play()
+    end
 
     local pctConnection
     pctConnection = RunService.RenderStepped:Connect(function()
@@ -6880,15 +6844,35 @@ function Library:LoadingScreen(game_name, duration)
         percentLabel.Text = tostring(pct) .. "%"
     end)
 
-    local perStep = progressDuration / #steps
-    for _, stepText in ipairs(steps) do
-        status.Text = stepText
-        task.wait(perStep)
+    status.Text = "Waiting for game..."
+    if not game:IsLoaded() then
+        setProgress(0.12, 0.5)
+        repeat
+            task.wait(0.1)
+        until game:IsLoaded()
     end
-    status.Text = "Ready"
+    setProgress(0.3, 0.25)
+    task.wait(0.15)
+
+    status.Text = "Loading Library..."
+    setProgress(0.5, 0.45)
+    task.wait(0.7)
+
+    status.Text = "Loading ESP..."
+    setProgress(0.75, 0.8)
+    task.wait(0.9)
+
+    status.Text = "Loading Modules..."
+    setProgress(0.95, 0.9)
+    task.wait(1.0)
+
+    status.Text = "Done."
+    setProgress(1, 0.2)
+    task.wait(0.15)
+
     percentLabel.Text = "100%"
 
-    task.wait(0.15)
+    task.wait(0.25)
 
     TweenService:Create(logoL, TweenInfo.new(0.45, Enum.EasingStyle.Quad, Enum.EasingDirection.In), { ImageTransparency = 1 }):Play()
     for i, letter in ipairs(trailingLetters) do
