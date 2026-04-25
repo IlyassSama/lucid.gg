@@ -231,14 +231,14 @@ local Library = {
     HudRegistry = {};
 
     -- colors and font --
-    FontColor = Color3.fromRGB(208, 207, 207);
-    MainColor = Color3.fromRGB(35, 35, 48);
-    BackgroundColor = Color3.fromRGB(29, 27, 38);
+    FontColor = Color3.fromRGB(255, 255, 255);
+    MainColor = Color3.fromRGB(36, 37, 37);
+    BackgroundColor = Color3.fromRGB(28, 29, 29);
 
     AccentColor = Color3.fromRGB(255, 254, 254);
     DisabledAccentColor = Color3.fromRGB(142, 142, 142);
 
-    OutlineColor = Color3.fromRGB(39, 35, 47);
+    OutlineColor = Color3.fromRGB(37, 37, 37);
     DisabledOutlineColor = Color3.fromRGB(70, 70, 70);
 
     DisabledTextColor = Color3.fromRGB(142, 142, 142);
@@ -6657,9 +6657,9 @@ function Library:LoadingScreen(game_name, duration)
     logo.Parent = loader
     logo.AnchorPoint = Vector2.new(0.5, 0.5)
     logo.BackgroundTransparency = 1
-    logo.Position = UDim2.new(0.5, 0, 0.48, 0)
+    logo.Position = UDim2.new(0.5, 0, 0.5, 0)
     logo.Size = UDim2.fromOffset(24, 24)
-    logo.Image = "rbxassetid://76132085526100"
+    logo.Image = "rbxassetid://98948027090597"
     logo.ScaleType = Enum.ScaleType.Fit
     logo.ImageColor3 = Color3.fromRGB(255, 255, 255)
     logo.ImageTransparency = 1
@@ -6677,13 +6677,13 @@ function Library:LoadingScreen(game_name, duration)
     loadingBarOuter.ZIndex = 11
     loadingBarOuter.ClipsDescendants = true
 
-    local loadingBarRoll = Instance.new("Frame")
-    loadingBarRoll.Parent = loadingBarOuter
-    loadingBarRoll.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    loadingBarRoll.BorderSizePixel = 0
-    loadingBarRoll.Position = UDim2.fromOffset(-36, 0)
-    loadingBarRoll.Size = UDim2.fromOffset(36, 2)
-    loadingBarRoll.ZIndex = 12
+    local loadingBarFill = Instance.new("Frame")
+    loadingBarFill.Parent = loadingBarOuter
+    loadingBarFill.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    loadingBarFill.BorderSizePixel = 0
+    loadingBarFill.Position = UDim2.fromOffset(0, 0)
+    loadingBarFill.Size = UDim2.new(0, 0, 1, 0)
+    loadingBarFill.ZIndex = 12
 
     local stateIcon = Instance.new("ImageLabel")
     stateIcon.Parent = loader
@@ -6701,24 +6701,26 @@ function Library:LoadingScreen(game_name, duration)
     task.wait(0.5)
     createTween(logo, 0.55, {
         ImageTransparency = 0,
-        Size = UDim2.fromOffset(190, 190)
+        Size = UDim2.fromOffset(420, 420)
     }, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
     task.wait(0.42)
     createTween(logo, 0.35, {
-        Size = UDim2.fromOffset(160, 160)
+        Size = UDim2.fromOffset(370, 370)
     }, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 
     createTween(stateIcon, 0.25, { ImageTransparency = 0 })
     loadingBarOuter.Visible = true
 
-    local rollingActive = true
-    task.spawn(function()
-        while rollingActive and loader.Parent do
-            loadingBarRoll.Position = UDim2.fromOffset(-36, 0)
-            createTween(loadingBarRoll, 0.55, { Position = UDim2.fromOffset(310, 0) }, Enum.EasingStyle.Linear).Completed:Wait()
-            task.wait(0.04)
-        end
-    end)
+    local function setProgress(progress, tweenTime)
+        local clamped = math.clamp(progress, 0, 1)
+        createTween(
+            loadingBarFill,
+            tweenTime or 0.2,
+            { Size = UDim2.new(clamped, 0, 1, 0) },
+            Enum.EasingStyle.Linear,
+            Enum.EasingDirection.Out
+        )
+    end
 
     local spinConnection
     spinConnection = RunService.RenderStepped:Connect(function(deltaTime)
@@ -6732,15 +6734,18 @@ function Library:LoadingScreen(game_name, duration)
     end)
 
     if not game:IsLoaded() then
+        setProgress(0.2, 0.45)
         repeat
             task.wait(0.1)
         until game:IsLoaded()
     end
 
+    setProgress(0.55, 0.55)
     task.wait(math.max(0.8, duration - 1.6))
+    setProgress(0.92, 0.45)
     task.wait(0.35)
 
-    rollingActive = false
+    setProgress(1, 0.2)
     if spinConnection then
         spinConnection:Disconnect()
         spinConnection = nil
