@@ -6659,7 +6659,7 @@ function Library:LoadingScreen(game_name, duration)
     logo.BackgroundTransparency = 1
     logo.Position = UDim2.new(0.5, 0, 0.5, 0)
     logo.Size = UDim2.fromOffset(24, 24)
-    logo.Image = "rbxassetid://98948027090597"
+    logo.Image = "rbxassetid://76132085526100"
     logo.ScaleType = Enum.ScaleType.Fit
     logo.ImageColor3 = Color3.fromRGB(255, 255, 255)
     logo.ImageTransparency = 1
