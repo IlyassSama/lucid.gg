@@ -6644,30 +6644,6 @@ function Library:LoadingScreen(game_name, duration)
     ParentUI(loader, true)
     Library.ActiveLoadingScreen = loader
 
-    local center = Instance.new("Frame")
-    center.Name = "Center"
-    center.Parent = loader
-    center.AnchorPoint = Vector2.new(0.5, 0.5)
-    center.BackgroundTransparency = 1
-    center.Position = UDim2.new(0.5, 0, 0.5, 0)
-    center.Size = UDim2.fromOffset(0, 0)
-
-    local texts = Instance.new("Frame")
-    texts.Name = "Texts"
-    texts.Parent = loader
-    texts.AnchorPoint = Vector2.new(0.5, 0.5)
-    texts.BackgroundTransparency = 1
-    texts.Position = UDim2.new(0.5, 0, 0.5, 0)
-    texts.Size = UDim2.new(1, 0, 0, 200)
-
-    local layout = Instance.new("UIListLayout")
-    layout.Parent = texts
-    layout.FillDirection = Enum.FillDirection.Horizontal
-    layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-    layout.VerticalAlignment = Enum.VerticalAlignment.Center
-    layout.SortOrder = Enum.SortOrder.LayoutOrder
-    layout.Padding = UDim.new(0, 15)
-
     local overlay = Instance.new("Frame")
     overlay.Name = "Overlay"
     overlay.Parent = loader
@@ -6677,31 +6653,17 @@ function Library:LoadingScreen(game_name, duration)
     overlay.Size = UDim2.fromScale(1, 1)
     overlay.ZIndex = 1
 
-    local status = Instance.new("TextLabel")
-    status.Parent = loader
-    status.AnchorPoint = Vector2.new(0.5, 0.5)
-    status.BackgroundTransparency = 1
-    status.Position = UDim2.new(0.5, 0, 0.62, 0)
-    status.Size = UDim2.fromOffset(560, 24)
-    status.Font = Enum.Font.GothamSemibold
-    status.Text = tostring(game_name or "Unknown Game")
-    status.TextColor3 = Color3.fromRGB(255, 255, 255)
-    status.TextSize = 16
-    status.TextTransparency = 1
-    status.ZIndex = 9
-
-    local subStatus = Instance.new("TextLabel")
-    subStatus.Parent = loader
-    subStatus.AnchorPoint = Vector2.new(0.5, 0.5)
-    subStatus.BackgroundTransparency = 1
-    subStatus.Position = UDim2.new(0.5, 0, 0.68, 0)
-    subStatus.Size = UDim2.fromOffset(560, 20)
-    subStatus.Font = Enum.Font.Gotham
-    subStatus.Text = ""
-    subStatus.TextColor3 = Color3.fromRGB(255, 255, 255)
-    subStatus.TextSize = 13
-    subStatus.TextTransparency = 1
-    subStatus.ZIndex = 9
+    local logo = Instance.new("ImageLabel")
+    logo.Parent = loader
+    logo.AnchorPoint = Vector2.new(0.5, 0.5)
+    logo.BackgroundTransparency = 1
+    logo.Position = UDim2.new(0.5, 0, 0.48, 0)
+    logo.Size = UDim2.fromOffset(24, 24)
+    logo.Image = "rbxassetid://98948027090597"
+    logo.ScaleType = Enum.ScaleType.Fit
+    logo.ImageColor3 = Color3.fromRGB(255, 255, 255)
+    logo.ImageTransparency = 1
+    logo.ZIndex = 10
 
     local loadingBarOuter = Instance.new("Frame")
     loadingBarOuter.Parent = loader
@@ -6709,7 +6671,7 @@ function Library:LoadingScreen(game_name, duration)
     loadingBarOuter.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     loadingBarOuter.BackgroundTransparency = 0.85
     loadingBarOuter.BorderSizePixel = 0
-    loadingBarOuter.Position = UDim2.new(0.5, 0, 0.74, 0)
+    loadingBarOuter.Position = UDim2.new(0.5, 0, 0.69, 0)
     loadingBarOuter.Size = UDim2.fromOffset(310, 2)
     loadingBarOuter.Visible = false
     loadingBarOuter.ZIndex = 11
@@ -6727,159 +6689,25 @@ function Library:LoadingScreen(game_name, duration)
     stateIcon.Parent = loader
     stateIcon.AnchorPoint = Vector2.new(0.5, 0.5)
     stateIcon.BackgroundTransparency = 1
-    stateIcon.Position = UDim2.new(0.5, 0, 0.79, 0)
-    stateIcon.Size = UDim2.fromOffset(18, 18)
+    stateIcon.Position = UDim2.new(0.5, 0, 0.74, 0)
+    stateIcon.Size = UDim2.fromOffset(30, 30)
     stateIcon.Image = "rbxassetid://18747491567"
     stateIcon.ImageColor3 = Color3.fromRGB(255, 255, 255)
     stateIcon.ImageTransparency = 1
     stateIcon.ZIndex = 12
 
-    local title = "LUCID.GG"
-    local customSpacing = { ["."] = 6 }
-
-    local function createTextGlyph(char)
-        local holder = Instance.new("Frame")
-        holder.Name = "Glyph"
-        holder.BackgroundTransparency = 1
-        holder.BorderSizePixel = 0
-        holder.Size = UDim2.fromOffset(56, 100)
-        holder.ZIndex = 8
-
-        local shadow = Instance.new("TextLabel")
-        shadow.Name = "Shadow"
-        shadow.Parent = holder
-        shadow.AnchorPoint = Vector2.new(0.5, 0.5)
-        shadow.BackgroundTransparency = 1
-        shadow.BorderSizePixel = 0
-        shadow.Position = UDim2.new(0.5, 1, 0.5, 1)
-        shadow.Size = UDim2.fromOffset(28, 50)
-        shadow.ZIndex = 8
-        shadow.Font = Enum.Font.GothamBold
-        shadow.Text = char
-        shadow.TextColor3 = Color3.fromRGB(0, 0, 0)
-        shadow.TextSize = 50
-        shadow.TextWrapped = true
-        shadow.TextTransparency = 1
-
-        local label = Instance.new("TextLabel")
-        label.Name = "Label"
-        label.Parent = holder
-        label.AnchorPoint = Vector2.new(0.5, 0.5)
-        label.BackgroundTransparency = 1
-        label.BorderSizePixel = 0
-        label.Position = UDim2.new(0.5, 0, 0.5, 0)
-        label.Size = UDim2.fromOffset(28, 50)
-        label.ZIndex = 9
-        label.Font = Enum.Font.GothamBold
-        label.Text = char
-        label.TextColor3 = Color3.fromRGB(255, 255, 255)
-        label.TextSize = 50
-        label.TextWrapped = true
-        label.TextTransparency = 1
-
-        local glyphSize = TextService:GetTextSize(label.Text, label.TextSize, label.Font, Vector2.new(1920, 1080))
-        label.Size = UDim2.fromOffset(glyphSize.X + 100, 50)
-        shadow.Size = UDim2.fromOffset(glyphSize.X + 100, 50)
-        holder.Size = UDim2.fromOffset((glyphSize.X * 2.5) + (customSpacing[char] or 0), 100)
-
-        return holder, label, shadow
-    end
-
     createTween(blur, 1, { Size = 60 })
     createTween(overlay, 0.5, { BackgroundTransparency = 0.7 }).Completed:Wait()
     task.wait(0.5)
+    createTween(logo, 0.55, {
+        ImageTransparency = 0,
+        Size = UDim2.fromOffset(190, 190)
+    }, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
+    task.wait(0.42)
+    createTween(logo, 0.35, {
+        Size = UDim2.fromOffset(160, 160)
+    }, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 
-    local posText = {}
-    local isFirst = true
-
-    for i = 1, #title do
-        local char = title:sub(i, i)
-        local glyphFrame, glyphText, glyphShadow = createTextGlyph(char)
-        glyphFrame.Parent = texts
-
-        if not isFirst then
-            glyphText.Position = UDim2.new(0.5, 0, 0.5, 200)
-            glyphShadow.Position = UDim2.new(0.5, 1, 0.5, 201)
-        end
-
-        table.insert(posText, {
-            Frame = glyphFrame,
-            Text = glyphText,
-            Shadow = glyphShadow
-        })
-
-        isFirst = false
-    end
-
-    local startShadow = Instance.new("TextLabel")
-    startShadow.Name = "StartShadow"
-    startShadow.Parent = loader
-    startShadow.AnchorPoint = Vector2.new(0.5, 0.5)
-    startShadow.BackgroundTransparency = 1
-    startShadow.BorderSizePixel = 0
-    startShadow.Position = UDim2.new(0.5, 1, 0.5, 1)
-    startShadow.Size = UDim2.fromOffset(28, 50)
-    startShadow.ZIndex = 8
-    startShadow.Font = Enum.Font.GothamBold
-    startShadow.Text = title:sub(1, 1)
-    startShadow.TextColor3 = Color3.fromRGB(0, 0, 0)
-    startShadow.TextSize = 50
-    startShadow.TextWrapped = true
-    startShadow.TextTransparency = 1
-
-    local startText = Instance.new("TextLabel")
-    startText.Name = "StartText"
-    startText.Parent = loader
-    startText.AnchorPoint = Vector2.new(0.5, 0.5)
-    startText.BackgroundTransparency = 1
-    startText.BorderSizePixel = 0
-    startText.Position = UDim2.new(0.5, 0, 0.5, 0)
-    startText.Size = UDim2.fromOffset(28, 50)
-    startText.ZIndex = 9
-    startText.Font = Enum.Font.GothamBold
-    startText.Text = title:sub(1, 1)
-    startText.TextColor3 = Color3.fromRGB(255, 255, 255)
-    startText.TextSize = 50
-    startText.TextWrapped = true
-    startText.TextTransparency = 1
-
-    local startScale = Instance.new("UIScale")
-    startScale.Parent = startText
-    startScale.Scale = 12
-
-    local firstSize = TextService:GetTextSize(startText.Text, startText.TextSize, startText.Font, Vector2.new(1920, 1080))
-    startText.Size = UDim2.fromOffset(firstSize.X + 100, 50)
-    startShadow.Size = UDim2.fromOffset(firstSize.X + 100, 50)
-
-    createTween(startText, 0.45, { TextTransparency = 0 })
-    createTween(startShadow, 0.45, { TextTransparency = 0.15 })
-    createTween(startScale, 0.5, { Scale = 3 })
-
-    task.wait(0.45)
-
-    local firstFrame = posText[1].Frame
-    local targetX = firstFrame.AbsolutePosition.X + (firstFrame.AbsoluteSize.X / 2)
-    local targetY = firstFrame.AbsolutePosition.Y + (firstFrame.AbsoluteSize.Y / 2) + math.abs(loader.AbsolutePosition.Y)
-    createTween(startText, 0.35, { Position = UDim2.fromOffset(targetX, targetY) })
-    createTween(startShadow, 0.35, { Position = UDim2.fromOffset(targetX + 1, targetY + 1) })
-
-    task.wait(0.5)
-
-    for i, textData in ipairs(posText) do
-        if i > 1 then
-            createTween(textData.Text, 0.65, {
-                Position = UDim2.new(0.5, 0, 0.5, 0),
-                TextTransparency = 0
-            })
-            createTween(textData.Shadow, 0.65, {
-                Position = UDim2.new(0.5, 1, 0.5, 1),
-                TextTransparency = 0.15
-            })
-        end
-    end
-
-    createTween(status, 0.25, { TextTransparency = 0.1 })
-    createTween(subStatus, 0.25, { TextTransparency = 0.1 })
     createTween(stateIcon, 0.25, { ImageTransparency = 0 })
     loadingBarOuter.Visible = true
 
@@ -6900,20 +6728,16 @@ function Library:LoadingScreen(game_name, duration)
             end
             return
         end
-        stateIcon.Rotation = (stateIcon.Rotation + (deltaTime * 260)) % 360
+        stateIcon.Rotation = (stateIcon.Rotation + (deltaTime * 110)) % 360
     end)
 
-    subStatus.Text = "Waiting for game..."
     if not game:IsLoaded() then
         repeat
             task.wait(0.1)
         until game:IsLoaded()
     end
 
-    subStatus.Text = "Loading script functions..."
     task.wait(math.max(0.8, duration - 1.6))
-
-    subStatus.Text = "Finishing..."
     task.wait(0.35)
 
     rollingActive = false
@@ -6925,20 +6749,9 @@ function Library:LoadingScreen(game_name, duration)
     stateIcon.Image = "rbxassetid://81634966211737"
     stateIcon.Rotation = 0
     createTween(stateIcon, 0.2, { ImageTransparency = 0 })
-    subStatus.Text = "Done."
 
     task.wait(0.6)
-
-    createTween(startText, 1.2, { TextTransparency = 1 }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
-    createTween(startShadow, 1.2, { TextTransparency = 1 }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
-
-    for _, textData in ipairs(posText) do
-        createTween(textData.Text, 1.2, { TextTransparency = 1 }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
-        createTween(textData.Shadow, 1.2, { TextTransparency = 1 }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
-    end
-
-    createTween(status, 0.45, { TextTransparency = 1 }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
-    createTween(subStatus, 0.45, { TextTransparency = 1 }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+    createTween(logo, 0.45, { ImageTransparency = 1 }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
     createTween(stateIcon, 0.45, { ImageTransparency = 1 }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
     createTween(overlay, 0.45, { BackgroundTransparency = 1 }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
     createTween(blur, 1.5, { Size = 0 }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
