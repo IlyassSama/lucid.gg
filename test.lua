@@ -231,14 +231,14 @@ local Library = {
     HudRegistry = {};
 
     -- colors and font --
-    FontColor = Color3.fromRGB(255, 255, 255);
-    MainColor = Color3.fromRGB(36, 37, 37);
-    BackgroundColor = Color3.fromRGB(28, 29, 29);
+    FontColor = Color3.fromRGB(208, 207, 207);
+    MainColor = Color3.fromRGB(35, 35, 48);
+    BackgroundColor = Color3.fromRGB(29, 27, 38);
 
     AccentColor = Color3.fromRGB(255, 254, 254);
     DisabledAccentColor = Color3.fromRGB(142, 142, 142);
 
-    OutlineColor = Color3.fromRGB(37, 37, 37);
+    OutlineColor = Color3.fromRGB(39, 35, 47);
     DisabledOutlineColor = Color3.fromRGB(70, 70, 70);
 
     DisabledTextColor = Color3.fromRGB(142, 142, 142);
@@ -6659,7 +6659,7 @@ function Library:LoadingScreen(game_name, duration)
     logo.BackgroundTransparency = 1
     logo.Position = UDim2.new(0.5, 0, 0.48, 0)
     logo.Size = UDim2.fromOffset(24, 24)
-    logo.Image = "rbxassetid://98948027090597"
+    logo.Image = "rbxassetid://76132085526100"
     logo.ScaleType = Enum.ScaleType.Fit
     logo.ImageColor3 = Color3.fromRGB(255, 255, 255)
     logo.ImageTransparency = 1
